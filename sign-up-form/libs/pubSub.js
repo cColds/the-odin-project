@@ -16,7 +16,7 @@ export default class PubSub {
     return self;
   }
 
-  publist(eventName, args) {
+  publish(eventName, args) {
     const self = this;
 
     if (!self.events[eventName]) {
