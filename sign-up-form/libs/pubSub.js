@@ -23,6 +23,6 @@ export default class PubSub {
       return false;
     }
 
-    return self.events.map((callback) => callback(args));
+    return self.events[eventName].map((callback) => callback(args));
   }
 }
