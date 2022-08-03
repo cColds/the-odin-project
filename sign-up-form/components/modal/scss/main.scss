@@ -1,0 +1,118 @@
+@import './colors';
+
+.modal {
+  background-color: $modal-color-dark-o35;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  &.modal_hidden,
+  &.modal_shown {
+    display: flex;
+  }
+
+  &.modal_hidden {
+    pointer-events: none;
+    animation: modal_hidden .35s ease-in-out forwards;
+
+    & .modal__container {
+      animation: modal__container_hidden .5s ease-in-out forwards;
+    }
+  }
+
+  &.modal_shown {
+    animation: modal_shown .35s ease-in-out forwards;
+
+    & .modal__container {
+      animation: modal__container_show .5s ease-in-out forwards;
+    }
+  }
+
+  & .modal__container {
+    background-color: $modal-color-white;
+    border-radius: 4px;
+    box-shadow: 0px 2.5px 5px rgba(0, 0, 0, 0.05);
+    position: relative;
+    min-width: 240px;
+    max-width: 420px;
+    padding: 30px 20px;
+  }
+
+  & .modal__close {
+    background-color: $modal-color-gray-l;
+    border: none;
+    border-radius: 4px;
+    color: $modal-color-gray-d;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: calc(100% + 15px);
+    width: 24px;
+    height: 24px;
+    transition: background-color 0.25s ease-in-out,
+                border-color 0.25s ease-in-out,
+                color 0.25s ease-in-out;
+
+    & .close__icon {
+      display: block;
+      width: 18px;
+      height: 18px;
+      margin: 0 auto;
+    }
+
+    @media (hover: none) {
+      &:active {
+        background-color: $modal-color-blue;
+        color: $modal-color-white;
+      }
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: $modal-color-blue;
+        color: $modal-color-white;
+      }
+    }
+  }
+
+  @keyframes modal_hidden {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes modal_shown {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes modal__container_hidden {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-30px);
+    }
+  }
+
+  @keyframes modal__container_show {
+    from {
+      transform: translateY(-30px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
