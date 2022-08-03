@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 @import "./themes";
+@import "../components/modal/scss/main.scss";
 
 *,
 *::before,
@@ -51,7 +52,8 @@ body {
         -webkit-user-select: none;
         user-select: none;
         transition: background-color 0.25s ease-in-out,
-          border-color 0.25s ease-in-out, color 0.25s ease-in-out;
+                    border-color 0.25s ease-in-out,
+                    color 0.25s ease-in-out;
 
         &.btn_secondary {
           background-color: transparent;
@@ -106,7 +108,8 @@ body {
         border-radius: 4px;
         padding: 4px 6px;
         color: $color-blue;
-        transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out;
+        transition: background-color 0.25s ease-in-out,
+                    color 0.25s ease-in-out;
 
         &:hover {
           background-color: $color-blue;
