@@ -62,6 +62,7 @@ export default class ModalView {
       </div>
     `;
 
+    self.elements.modalContainer = container.querySelector('.modal__container');
     self.elements.modalCloseBtn = container.querySelector('.modal__close');
     self.elements.modalContent = container.querySelector('.modal__content');
 

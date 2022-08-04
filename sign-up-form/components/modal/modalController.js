@@ -18,7 +18,7 @@ export default class ModalController {
 
   onRender() {
     const self = this;
-    const { modalCloseBtn } = self.view.elements;
+    const { container, modalContainer, modalCloseBtn } = self.view.elements;
 
     document.addEventListener('animationend', ({ animationName, target }) => {
       if (animationName === 'modal_hidden') {
@@ -27,6 +27,8 @@ export default class ModalController {
       }
     });
 
+    container.addEventListener('click', () => self.toggleVisible());
+    modalContainer.addEventListener('click', (e) => e.stopPropagation());
     modalCloseBtn.addEventListener('click', () => self.toggleVisible());
 
     return self;
