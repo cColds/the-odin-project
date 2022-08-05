@@ -27,8 +27,8 @@ export default class ModalController {
       }
     });
 
-    container.addEventListener('click', () => self.toggleVisible());
-    modalContainer.addEventListener('click', (e) => e.stopPropagation());
+    container.addEventListener('mousedown', () => self.toggleVisible());
+    modalContainer.addEventListener('mousedown', (e) => e.stopPropagation());
     modalCloseBtn.addEventListener('click', () => self.toggleVisible());
 
     return self;
