@@ -23,23 +23,36 @@ export default class VInputModule {
     const self = this;
     const { valid = null, validError = null } = self.settings;
     const errors = [];
+    let state = false;
 
     if (valid?.reg && typeof valid?.reg === 'object') {
       valid.reg.forEach((r, i) => {
         if (!value.match(r) && validError.reg[i]) {
-          errors.push(validError.reg[i]);
+          if (validError?.reg[i]) {
+            errors.push(validError.reg[i]);
+          }
+          state = true;
         }
       });
     } else if (valid?.reg && !value.match(valid.reg)) {
-      errors.push(validError.reg);
+      if (validError?.reg) {
+        errors.push(validError.reg);
+      }
+      state = true;
     }
 
     if (valid?.minlength && value.length < valid?.minlength) {
-      errors.push(validError.minlength);
+      if (validError?.minlength) {
+        errors.push(validError.minlength);
+      }
+      state = true;
     }
 
     if (valid?.maxlength && value.length > valid?.maxlength) {
-      errors.push(validError.maxlength);
+      if (validError?.maxlength) {
+        errors.push(validError.maxlength);
+      }
+      state = true;
     }
 
     if (valid?.date) {
@@ -51,23 +64,32 @@ export default class VInputModule {
         && date.getMonth() === month
         && date.getFullYear() === year)
       ) {
-        errors.push(validError.date);
+        if (validError?.date) {
+          errors.push(validError.date);
+        }
+        state = true;
       }
     }
 
     if (valid?.callback && typeof valid?.callback === 'object') {
       valid.callback.forEach((callback, i) => {
         if (!callback(value)) {
-          errors.push(validError.callback[i]);
+          if (validError?.callback[i]) {
+            errors.push(validError.callback[i]);
+          }
+          state = true;
         }
       });
     } else if (valid?.callback && !valid?.callback(value)) {
-      errors.push(validError.callback);
+      if (validError?.callback) {
+        errors.push(validError.callback);
+      }
+      state = true;
     }
 
     return {
       errors,
-      state: errors.length > 0,
+      state,
     };
   }
 
@@ -75,7 +97,7 @@ export default class VInputModule {
     const self = this;
     const valid = self.validInput(value);
 
-    self.isValid = valid.state;
+    self.isValid = !valid.state;
     self.value = value;
     self.events.publish('showError', valid.errors);
   }
