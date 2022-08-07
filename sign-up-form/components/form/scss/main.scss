@@ -1,0 +1,82 @@
+@import 'colors';
+
+.form {
+  & .form__tab {
+    display: flex;
+    border-bottom: 1px solid $form-color-gray;
+    height: 30px;
+
+    & .tab {
+      background-color: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: $form-color-gray;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      height: 30px;
+      width: 100%;
+      transition: border-color .25s ease-in-out,
+                  color .25s ease-in-out;
+
+      &:hover {
+        color: $form-color-blue;
+      }
+
+      &.tab_active {
+        border-bottom-color: $form-color-blue;
+        color: $form-color-blue;
+        cursor: default;
+      }
+    }
+  }
+
+  & .form__content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    gap: 20px;
+
+    & .form__fieldset {
+      border: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    & .form__submit {
+      background-color: $form-color-gray-l;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: $form-color-gray-d;
+      cursor: pointer;
+      height: 30px;
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background-color .25s ease-in-out,
+                  border-color .25s ease-in-out,
+                  color .25s ease-in-out,
+                  opacity .25s ease-in-out;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: .5;
+      }
+
+      @media (hover: none) {
+        &:not(:disabled):active {
+          background-color: $form-color-blue;
+          color: $form-color-white;
+        }
+      }
+
+      @media (hover: hover) {
+        &:not(:disabled):hover {
+          background-color: $form-color-blue;
+          color: $form-color-white;
+        }
+      }
+    }
+  }
+}
