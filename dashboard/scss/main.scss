@@ -188,6 +188,14 @@ li {
       grid-auto-flow: column;
       align-items: center;
       justify-content: space-between;
+      column-gap: 30px;
+      row-gap: 15px;
+
+      &:nth-child(2) {
+        @media screen and (max-width: 900px) {
+          grid-auto-flow: row;
+        }
+      }
     }
 
     & .header__search {
@@ -426,6 +434,13 @@ li {
                     "project trending" 1fr / 1fr 320px;
       gap: 30px;
       padding: 30px;
+
+      @media screen and (max-width: 900px) {
+        grid-template:
+                      "project"
+                      "announcement"
+                      "trending";
+      }
     }
 
     & .content__block {
