@@ -43,6 +43,8 @@ li {
   position: fixed;
   width: 90px;
   height: 100vh;
+  overflow: hidden;
+  z-index: 10000;
   transition: width .2s ease-in-out;
 
   & .sidebar__header {
@@ -76,7 +78,7 @@ li {
       display: grid;
       grid-auto-flow: column;
       grid-auto-columns: 30px auto;
-      // column-gap: 15px;
+      column-gap: 15px;
       align-items: center;
       height: 40px;
       padding: 0 15px;
@@ -133,6 +135,7 @@ li {
 
   &:hover {
     width: 320px;
+    overflow: auto;
 
     & .sidebar__header {
       column-gap: 15px;
