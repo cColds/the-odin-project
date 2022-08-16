@@ -1,0 +1,88 @@
+{
+  "books": [
+    {
+      "title": "Deno Succinctly",
+      "author": "Mark Lewin",
+      "pages-read": 31,
+      "total-pages": 110,
+      "is-read": false
+    },
+    {
+      "title": "Azure Automation",
+      "author": "Michael McKeown",
+      "pages-read": 12,
+      "total-pages": 116,
+      "is-read": false
+    },
+    {
+      "title": "HackSpace Magazine: Issue 57",
+      "author": "HackSpace Team",
+      "pages-read": 83,
+      "total-pages": 116,
+      "is-read": false
+    },
+    {
+      "title": "How To Build a Website with HTML",
+      "author": "Erin Glass",
+      "pages-read": 95,
+      "total-pages": 95,
+      "is-read": true
+    },
+    {
+      "title": "Azure Machine Learning",
+      "author": "Jeff Barnes",
+      "pages-read": 0,
+      "total-pages": 240,
+      "is-read": false
+    },
+    {
+      "title": "Wearable Tech Projects",
+      "author": "Sophy Wong",
+      "pages-read": 0,
+      "total-pages": 163,
+      "is-read": false
+    },
+    {
+      "title": "Introduction to Autonomous Robots",
+      "author": "Nikolaus Correll",
+      "pages-read": 201,
+      "total-pages": 368,
+      "is-read": false
+    },
+    {
+      "title": "A Treatise on Systems (volume 2)",
+      "author": "Mark Burgess",
+      "pages-read": 246,
+      "total-pages": 715,
+      "is-read": false
+    },
+    {
+      "title": "A Treatise on Systems (volume 1)",
+      "author": "Mark Burgess",
+      "pages-read": 56,
+      "total-pages": 479,
+      "is-read": true
+    },
+    {
+      "title": "Open Workbook of Cryptology",
+      "author": "Jonathan A. Poritz",
+      "pages-read": 0,
+      "total-pages": 92,
+      "is-read": false
+    },
+    {
+      "title": "Algorithmic Aspects of Machine Learning",
+      "author": "Ankur Moitra",
+      "pages-read": 249,
+      "total-pages": 249,
+      "is-read": true
+    },
+    {
+      "title": "Resilient Web Design",
+      "author": "Jeremy Keith",
+      "pages-read": 2,
+      "total-pages": 150,
+      "is-read": false
+    }
+  ]
+}
