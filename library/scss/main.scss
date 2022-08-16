@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+}
+
+*:focus {
+  outline: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ol,
+ul,
+li {
+  list-style: none;
+}
+
+svg,
+img,
+span,
+i {
+  display: block;
+}
+
+fieldset {
+  border: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+button {
+  font-weight: 500;
+}
+
+@import '../components/app/scss/app.scss';
+@import '../components/formBook/scss/formBook.scss';
+@import '../components/formApply/scss/formApply.scss';
+@import '../components/book/scss/book.scss';
+@import '../components/modal/scss/modal.scss';

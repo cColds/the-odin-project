@@ -1,0 +1,126 @@
+.form-book {
+  & .form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    &:not(:last-of-type) {
+      margin-bottom: 15px;
+    }
+
+    & .field__label {
+      color: $color-gray-l;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    & .field__error {
+      display: none;
+      color: $color-red;
+      margin-left: 5px;
+      font-size: 12px;
+      font-weight: 400;
+
+      & li {
+        line-height: 135%;
+        list-style: disc;
+        list-style-position: inside;
+      }
+
+      &.field__error_show {
+        display: block;
+      }
+    }
+  }
+
+  & .form__field_checkbox {
+    & .field__label {
+      flex-direction: row;
+      align-items: center;
+      cursor: pointer;
+
+      &:hover {
+        & .field__checkbox {
+          border-color: $color-blue;
+        }
+      }
+
+      & .field__checkbox {
+        margin-left: auto;
+      }
+    }
+  }
+
+  & .field__input,
+  & .field__checkbox,
+  & .form__submit {
+    appearance: none;
+    background: none;
+    background-color: $color-white-d;
+    border: 1px solid $color-white-d;
+    border-radius: 5px;
+    color: $color-gray-l;
+    height: 40px;
+    padding: 0 15px;
+    font-size: 13px;
+    font-weight: 400;
+    transition: background-color .25s ease-out,
+                border-color .25s ease-out,
+                color .25s ease-out;
+  }
+
+  & .field__input:active,
+  & .field__input:focus {
+    background-color: transparent;
+    border-color: $color-blue;
+    color: $color-blue;
+  }
+
+  & .field__input:hover {
+    border-color: $color-blue;
+  }
+
+  & .field__input_checkbox {
+    display: none;
+
+    &:checked {
+      & + .field__checkbox {
+        background-color: $color-blue;
+        border-color: $color-blue;
+      }
+    }
+  }
+
+  & .field__checkbox {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+
+    &:hover {
+      border-color: $color-blue;
+    }
+  }
+
+  & .form__submit {
+    background: none;
+    border-color: $color-gray-l;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 30px;
+    font-weight: 500;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: .5;
+    }
+
+    &:not(:disabled):hover {
+      background-color: $color-blue;
+      border-color: $color-blue;
+      color: $color-white;
+    }
+  }
+}
