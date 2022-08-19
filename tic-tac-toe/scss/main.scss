@@ -9,6 +9,53 @@
   font-family: "Inter", sans-serif;
 }
 
-@import 'colors';
-@import 'typo';
-@import 'mixins';
+*:focus {
+  outline: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ol,
+ul,
+li {
+  list-style: none;
+}
+
+i,
+a,
+svg,
+img,
+span {
+  display: inline-block;
+}
+
+fieldset {
+  border: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+button {
+  font-weight: 500;
+}
+
+@import './colors';
+@import './typo';
+@import './mixins';
+
+@import '../components/app/scss/app.scss';
+@import '../components/menu/scss/menu.scss';
+@import '../components/game/scss/game.scss';
