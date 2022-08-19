@@ -1,0 +1,51 @@
+.form-apply {
+  margin-top: 15px;
+
+  & .form__message {
+    color: $color-gray-m;
+    font: $typo-h3-n;
+    text-align: center;
+
+    & .message_bolder {
+      color: $color-gray;
+      font: $typo-h3;
+    }
+
+    & span {
+      display: inline;
+    }
+  }
+
+  & .form__footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 30px;
+  }
+
+  & .form__btn {
+    background: none;
+    border: 1px solid $color-gray-l;
+    border-radius: 5px;
+    color: $color-gray-l;
+    cursor: pointer;
+    height: 40px;
+    padding: 0 30px;
+    font: $typo-h3;
+    transition: background-color .25s ease-in-out,
+                border-color .25s ease-in-out,
+                color .25s ease-in-out;
+
+    &:hover {
+      background-color: $color-blue;
+      border-color: $color-blue;
+      color: $color-white;
+    }
+
+    &[type=reset]:hover {
+      background-color: $color-red;
+      border-color: $color-red;
+      color: $color-white;
+    }
+  }
+}

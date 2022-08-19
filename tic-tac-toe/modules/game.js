@@ -12,7 +12,6 @@ export default class Game {
     self.players = { x: null, o: null };
     self.currentTurn = null;
     self.gameInterval = null;
-    self.isPaused = false;
 
     self.renderApp();
   }
@@ -42,6 +41,16 @@ export default class Game {
         if (self.setTurn(playerTurn, cell)) {
           self.app.controller.setCell({ sign: currentTurn, player: playerTurn, cell });
         }
+      })
+      .subscribe('goToMenu', () => {
+        self.app.controller.renderScene({ name: 'menu' });
+      })
+      .subscribe('resetGame', () => {
+        const { players } = self;
+
+        self.app.controller.renderScene({ name: 'game', players });
+
+        self.start();
       });
   }
 
@@ -66,6 +75,20 @@ export default class Game {
     const self = this;
 
     return self.currentTurn === 'x' ? 'o' : 'x';
+  }
+
+  static getChance(difficulty) {
+    const rnd = Math.random();
+
+    switch (difficulty) {
+      case 2:
+        return true;
+      case 1:
+        return rnd < 0.7;
+      case 0:
+      default:
+        return rnd < 0.35;
+    }
   }
 
   setNextTurn() {
@@ -129,16 +152,8 @@ export default class Game {
     clearInterval(self.gameInterval);
     self.board.clear();
 
-    self.players = { x: null, o: null };
     self.currentTurn = null;
     self.gameInterval = null;
-    self.isPaused = false;
-  }
-
-  pause(state = !this.isPaused) {
-    const self = this;
-
-    self.isPaused = state;
   }
 
   update() {
@@ -147,17 +162,17 @@ export default class Game {
     const boardWinner = self.board.getWinner();
     const isDraw = self.board.isDraw();
 
-    if (!self.isPaused) {
-      if (boardWinner) {
-        console.log(`Winner: ${boardWinner.name}`);
-        self.end();
-      } else if (isDraw) {
-        console.log('DRAW');
-        self.end();
-      } else if (playerTurn instanceof Computer) {
-        const computerTurn = self.getBestTurn();
-        self.app.module.events.publish('setTurn', computerTurn);
-      }
+    if (boardWinner) {
+      self.end();
+      self.app.controller.winner(boardWinner);
+    } else if (isDraw) {
+      self.end();
+      self.app.controller.draw();
+    } else if (playerTurn instanceof Computer) {
+      const computerTurn = Game.getChance(playerTurn.difficulty)
+        ? self.getBestTurn()
+        : self.getRandomTurn();
+      self.app.module.events.publish('setTurn', computerTurn);
     }
   }
 }

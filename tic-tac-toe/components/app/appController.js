@@ -26,4 +26,16 @@ export default class AppController {
 
     self.module.events.publish('setCell', data);
   }
+
+  winner(player) {
+    const self = this;
+
+    self.module.events.publish('modalWinner', player);
+  }
+
+  draw() {
+    const self = this;
+
+    self.module.events.publish('modalDraw');
+  }
 }

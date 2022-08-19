@@ -1,5 +1,7 @@
 import Menu from '../menu/menu.js';
 import Game from '../game/game.js';
+import Modal from '../modal/modal.js';
+import FormApply from '../formApply/formApply.js';
 
 export default class AppView {
   constructor(module) {
@@ -10,7 +12,46 @@ export default class AppView {
     // Events
     self.module.events
       .subscribe('renderScene', (params) => self.renderScene(params))
-      .subscribe('showPlayerTurn', (sign) => self.showPlayerTurn(sign));
+      .subscribe('showPlayerTurn', (sign) => self.showPlayerTurn(sign))
+      .subscribe('modalWinner', (player) => {
+        self.showMessage({
+          message: `<span class="message_bolder">${player.name}</span> won this game!`,
+        });
+      })
+      .subscribe('modalDraw', () => {
+        self.showMessage({
+          message: '<span class="message_bolder">DRAW</span>...',
+        });
+      });
+  }
+
+  showMessage({ message }) {
+    const self = this;
+    const { modal } = self.elements;
+
+    (() => new FormApply({
+      node: modal.view.elements.content,
+      message,
+      btn: {
+        submit: {
+          title: 'RESTART',
+          callback: () => {
+            modal.controller.hide();
+            self.module.events.publish('resetGame');
+          },
+        },
+        reset: {
+          title: 'MENU',
+          callback: () => {
+            modal.controller.hide();
+            self.module.events.publish('goToMenu');
+          },
+        },
+      },
+    }))();
+
+    modal.controller.setTitle('Message');
+    modal.controller.show();
   }
 
   showPlayerTurn(sign) {
@@ -95,6 +136,10 @@ export default class AppView {
     `;
 
     self.elements.appMain = self.elements.app.querySelector('.app__main .wrapper');
+    self.elements.modal = new Modal({
+      node: self.elements.app,
+      isClose: false,
+    });
 
     self.module.events.publish('render');
   }
