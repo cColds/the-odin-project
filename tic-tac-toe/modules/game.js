@@ -2,15 +2,47 @@ import Board from './board.js';
 import Player from './player.js';
 import Computer from './computer.js';
 import minimax from './minimax.js';
+import App from '../components/app/app.js';
 
 export default class Game {
   constructor() {
     const self = this;
+    self.app = null;
     self.board = new Board();
     self.players = { x: null, o: null };
     self.currentTurn = null;
     self.gameInterval = null;
     self.isPaused = false;
+
+    self.renderApp();
+  }
+
+  renderApp() {
+    const self = this;
+    self.app = new App({
+      node: document.body,
+      appendMode: 'prepend',
+    });
+
+    self.app.controller.renderScene({ name: 'menu' });
+
+    self.app.module.events
+      .subscribe('createPlayers', (playersData) => {
+        self.createPlayer({ ...playersData.first, img: './assets/player-1.png', side: 'x' });
+        self.createPlayer({ ...playersData.second, img: './assets/player-2.png', side: 'o' });
+
+        self.app.controller.renderScene({ name: 'game', players: self.players });
+
+        self.start();
+      })
+      .subscribe('setTurn', (cell) => {
+        const { currentTurn } = self;
+        const playerTurn = self.players[currentTurn];
+
+        if (self.setTurn(playerTurn, cell)) {
+          self.app.controller.setCell({ sign: currentTurn, player: playerTurn, cell });
+        }
+      });
   }
 
   getRandomTurn() {
@@ -36,11 +68,22 @@ export default class Game {
     return self.currentTurn === 'x' ? 'o' : 'x';
   }
 
+  setNextTurn() {
+    const self = this;
+
+    self.currentTurn = self.getNextTurn();
+
+    self.app.module.events.publish('setNextTurn', {
+      sign: self.currentTurn,
+      isComputer: self.players[self.currentTurn] instanceof Computer,
+    });
+  }
+
   setTurn(player, cell) {
     const self = this;
 
     if (self.board.setCell(player, cell)) {
-      self.currentTurn = self.getNextTurn();
+      self.setNextTurn();
       return true;
     }
 
@@ -48,10 +91,10 @@ export default class Game {
   }
 
   createPlayer({
-    name,
     img,
-    difficulty,
+    name,
     isComputer = false,
+    difficulty,
     side = 'x',
   }) {
     const self = this;
@@ -61,8 +104,8 @@ export default class Game {
     }
 
     self.players[side] = isComputer
-      ? new Computer({ name, img, difficulty })
-      : new Player({ name, img });
+      ? new Computer({ img, name: name || `Player ${side.toUpperCase()}`, difficulty })
+      : new Player({ img, name: name || `Player ${side.toUpperCase()}` });
 
     return true;
   }
@@ -74,8 +117,8 @@ export default class Game {
       return false;
     }
 
-    self.currentTurn = 'x';
-    self.gameInterval = setInterval(() => self.update(), 1);
+    self.setNextTurn();
+    self.gameInterval = setInterval(() => self.update(), 500);
 
     return true;
   }
@@ -106,13 +149,14 @@ export default class Game {
 
     if (!self.isPaused) {
       if (boardWinner) {
+        console.log(`Winner: ${boardWinner.name}`);
         self.end();
       } else if (isDraw) {
+        console.log('DRAW');
         self.end();
       } else if (playerTurn instanceof Computer) {
-        self.setTurn(playerTurn, self.getBestTurn());
-      } else {
-        self.setTurn(playerTurn, self.getRandomTurn());
+        const computerTurn = self.getBestTurn();
+        self.app.module.events.publish('setTurn', computerTurn);
       }
     }
   }
