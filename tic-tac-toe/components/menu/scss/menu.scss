@@ -1,0 +1,150 @@
+.menu {
+  width: 100%;
+
+  & .menu__player {
+
+    & .player {
+      --player-color: #{$color-blue};
+
+      @include shadow;
+      background-color: $color-white-m;
+      border: 1px solid $color-white-d;
+      border-radius: 5px;
+      display: flex;
+      padding: 15px;
+      gap: 15px;
+
+      &.player_secnd {
+        --player-color: #{$color-red};
+      }
+
+      &::before {
+        background-color: var(--player-color);
+        border-radius: 5px;
+        content: "";
+        display: block;
+        position: relative;
+        min-width: 5px;
+      }
+
+      & .player__image {
+        border-radius: 50%;
+        width: 64px;
+        height: 64px;
+      }
+
+      & .player__setting {
+        width: 100%;
+
+        & .setting {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+
+          & .setting__label {
+            color: $color-gray;
+            font: $typo-h2;
+          }
+
+          & .setting__input {
+            background: none;
+            background-color: $color-white-d;
+            border: 1px solid $color-white-d;
+            border-radius: 5px;
+            color: $color-gray-m;
+            height: 40px;
+            padding: 0 15px;
+            font: $typo-h3-n;
+            transition: background-color .25s ease-in-out,
+                        border-color .25s ease-in-out,
+                        color .25s ease-in-out;
+
+            &::placeholder {
+              color: $color-gray-m;
+            }
+
+            &:hover,
+            &:active,
+            &:focus {
+              background-color: $color-white-m;
+              border-color: var(--player-color);
+              color: $color-gray;
+            }
+          }
+
+          & + .setting {
+            margin-top: 15px;
+          }
+
+          & .setting-set {
+            display: flex;
+            gap: 15px;
+          }
+
+          & .radio {
+            width: 100%;
+
+            & .radio__input {
+              display: none;
+              width: 0;
+              height: 0;
+            }
+
+            & .radio__label {
+              background-color: $color-white-d;
+              border: 1px solid $color-white-d;
+              border-radius: 5px;
+              color: $color-gray-m;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              height: 40px;
+              font: $typo-h3;
+              transition: background-color .25s ease-in-out,
+                          border-color .25s ease-in-out,
+                          color .25s ease-in-out;
+            }
+
+            & .radio__input:hover + .radio__label {
+              background-color: $color-white-m;
+              border-color: var(--player-color);
+              color: var(--player-color);
+            }
+
+            & .radio__input:checked + .radio__label {
+              background-color: var(--player-color);
+              border-color: var(--player-color);
+              color: $color-white;
+            }
+          }
+        }
+      }
+
+      & + .player {
+        margin-top: 15px;
+      }
+    }
+  }
+
+  .submit {
+    background: none;
+    border: 1px solid $color-gray;
+    border-radius: 5px;
+    color: $color-gray;
+    cursor: pointer;
+    height: 40px;
+    width: 100%;
+    margin-top: 30px;
+    text-transform: uppercase;
+    transition: background-color .25s ease-in-out,
+                border-color .25s ease-in-out,
+                color .25s ease-in-out;
+
+    &:hover {
+      background-color: $color-blue;
+      border-color: $color-blue;
+      color: $color-white;
+    }
+  }
+}
