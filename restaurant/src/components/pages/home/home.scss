@@ -1,0 +1,33 @@
+@import '../../../scss/colors';
+
+#hero {
+  background: $color-image-blackout, url(../../../assets/images/hero-bg.png) no-repeat bottom / cover;
+  height: 100vh;
+
+  & .wrapper {
+    padding-top: 100px;
+  }
+
+  & .hero__banner {
+    background-color: $color-black-lm-o5;
+    border: 4px solid $color-white;
+    width: 100%;
+    max-width: 740px;
+    padding: 60px;
+    margin: 120px auto 0;
+    text-align: center;
+
+    & .banner__title {
+      color: $color-white;
+      font-size: 48px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    & .banner__desc {
+      color: $color-white-m;
+      font-size: 18px;
+      margin-top: 30px;
+    }
+  }
+}

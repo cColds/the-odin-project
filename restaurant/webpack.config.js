@@ -1,16 +1,15 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 const path = require('path');
 
 /** @type { import('webpack').Configuration } */
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
 
-  entry: {
-    index: './src/index.js',
-  },
+  entry: './src/index.js',
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, './dist'),
@@ -34,6 +33,10 @@ module.exports = {
         ],
       },
       {
+        test: /\.(png|jpg|jpeg)$/,
+        type: 'asset/resource',
+      },
+      {
         test: /\.(woff|woff2|eot|otf|ttf)$/,
         type: 'asset/resource',
       },
@@ -42,7 +45,7 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Zen - Restaurant',
+      title: 'Restaurant',
       template: './src/index.html',
       minify: true,
     }),
@@ -53,9 +56,9 @@ module.exports = {
   ],
 
   optimization: {
-    minimize: true,
     minimizer: [
       new CssMinimizerWebpackPlugin(),
+      new TerserWebpackPlugin(),
     ],
     chunkIds: 'deterministic',
     runtimeChunk: 'single',
@@ -68,17 +71,5 @@ module.exports = {
         },
       },
     },
-  },
-
-  devtool: 'inline-source-map',
-  devServer: {
-    static: './dist',
-    hot: true,
-    open: true,
-    liveReload: true,
-    watchFiles: [
-      './src/index.html',
-      './src/**/*.scss',
-    ],
   },
 };
