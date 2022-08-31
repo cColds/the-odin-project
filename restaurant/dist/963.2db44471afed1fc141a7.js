@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrestaurant=self.webpackChunkrestaurant||[]).push([[963],{963:(s,e,t)=>{s.exports=t.p+"./assets/10-chicken-salads-on-the-lighter-side.png"}}]);

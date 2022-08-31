@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrestaurant=self.webpackChunkrestaurant||[]).push([[991],{991:(s,e,t)=>{s.exports=t.p+"./assets/honey-garlic-slow-cooker-chicken-thighs.png"}}]);

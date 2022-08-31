@@ -1,0 +1,88 @@
+{
+  "food": [
+    {
+      "img": "quick-chicken-piccata.png",
+      "title": "Quick Chicken Piccata",
+      "description": "These quick and easy pan-fried chicken breasts are topped with a simple pan sauce made with capers, butter, white wine, and lemon juice.",
+      "author": "Chef John",
+      "authorLink": "https://www.allrecipes.com/cook/foodwisheswithchefjohn"
+    },
+    {
+      "img": "15-greek-grilled-chicken-recipes.png",
+      "title": "15 Greek Grilled Chicken Recipes",
+      "description": "Make restaurant-worthy Greek grilled chicken at home.",
+      "author": "Corey Williams",
+      "authorLink": "https://www.allrecipes.com/author/corey-williams"
+    },
+    {
+      "img": "chicken-pot-pie.png",
+      "title": "Chicken Pot Pie",
+      "description": "Delicious chicken pot pie made from scratch with carrots, peas, and celery.",
+      "author": "Robbie Rice",
+      "authorLink": "https://www.allrecipes.com/cook/257438"
+    },
+    {
+      "img": "our-20-best-new-chicken-recipes-of-2021.png",
+      "title": "Our 20 Best New Chicken Recipes of 2021",
+      "description": "The Allrecipes community flocked to these new chicken recipes, from creamy chicken salad to hot fried chicken.",
+      "author": "Mary Claire Lagroue",
+      "authorLink": "https://www.allrecipes.com/author/mary-claire-lagroue/"
+    },
+    {
+      "img": "one-pot-cilantro-lime-chicken-thighs-and-rice.png",
+      "title": "One-Pot Cilantro Lime Chicken Thighs and Rice",
+      "description": "Chicken thighs with cilantro and lime juice and cooked in one dish.",
+      "author": "fabeveryday",
+      "authorLink": "https://www.allrecipes.com/cook/fabeveryday"
+    },
+    {
+      "img": "10-chicken-salads-on-the-lighter-side.png",
+      "title": "10 Chicken Salads on the Lighter Side",
+      "description": "These chicken salad recipes rely on wholesome ingredients to create healthy chicken salads that your whole family will love.",
+      "author": "Hayley Sugg",
+      "authorLink": "https://www.allrecipes.com/author/hayley-sugg/"
+    },
+    {
+      "img": "chicken-stir-fry.png",
+      "title": "Chicken Stir-Fry",
+      "description": "A quick and easy dish to prepare, this chicken stir-fry is packed with veggies. Try adding bean sprouts, bamboo shoots, snap peas, or any of your favorite vegetables. Serve it with white or brown rice, or noodles.",
+      "author": "Katie Sechrist",
+      "authorLink": "https://www.allrecipes.com/cook/3283361"
+    },
+    {
+      "img": "air-fryer-apricot-glazed-chicken-breasts.png",
+      "title": "Air Fryer Apricot-Glazed Chicken Breasts",
+      "description": "Fruit preserves work beautifully for glazing certain meats and fish, and apricot is one of the best for chicken. Serve over white rice.",
+      "author": "lutzflcat",
+      "authorLink": "https://www.allrecipes.com/cook/lutzflcat"
+    },
+    {
+      "img": "how-to-boil-chicken.png",
+      "title": "How to Boil Chicken",
+      "description": "Meal prep just got easier.",
+      "author": "Melanie Fincher",
+      "authorLink": "https://www.allrecipes.com/author/melanie-fincher/"
+    },
+    {
+      "img": "kung-pao-chicken.png",
+      "title": "Kung Pao Chicken",
+      "description": "This sweet, sour, and spicy restaurant favorite is easy to make at home.",
+      "author": "Arlena",
+      "authorLink": "https://www.allrecipes.com/cook/24321201"
+    },
+    {
+      "img": "aussie-chicken.png",
+      "title": "Aussie Chicken",
+      "description": "This recipe is very similar to a chicken dish served at a local well-known restaurant. A friend of mine was kind enough to share it. It includes chicken breasts topped with mushrooms, bacon and cheese cooked in a honey-mustard sauce.",
+      "author": "beckie",
+      "authorLink": "https://www.allrecipes.com/cook/4319"
+    },
+    {
+      "img": "honey-garlic-slow-cooker-chicken-thighs.png",
+      "title": "Honey-Garlic Slow Cooker Chicken Thighs",
+      "description": "I have used it often. It's easy and uses pantry staples. Always a hit with adults and kids. Serve with basmati rice or quinoa and steamed or roasted vegetables.",
+      "author": "Myrna",
+      "authorLink": "https://www.allrecipes.com/cook/2792648"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrestaurant=self.webpackChunkrestaurant||[]).push([[335],{335:(s,e,a)=>{s.exports=a.p+"./assets/kung-pao-chicken.png"}}]);

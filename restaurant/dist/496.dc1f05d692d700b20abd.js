@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrestaurant=self.webpackChunkrestaurant||[]).push([[496],{496:(s,e,t)=>{s.exports=t.p+"./assets/how-to-boil-chicken.png"}}]);

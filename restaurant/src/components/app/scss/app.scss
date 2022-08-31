@@ -1,0 +1,99 @@
+@import "../../../scss/colors";
+
+.app {
+  min-height: 100vh;
+
+  & .wrapper {
+    width: 100%;
+    max-width: 1060px;
+    height: 100%;
+    margin: 0 auto;
+  }
+
+  &__header {
+    background-color: $color-black-lm-o5;
+    color: $color-white;
+    position: fixed;
+    width: 100%;
+    height: 100px;
+    z-index: 10000;
+    transition: background-color 0.25s;
+
+    & .wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    &.app__header-no-opacity {
+      background-color: $color-black-lm;
+    }
+
+    & .header__logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 140px;
+      height: 60px;
+
+      & .logo__text {
+        color: $color-white;
+        font-size: 18px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+    }
+
+    & .header__nav {
+      margin-left: 60px;
+
+      & .nav__list {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        & .nav__btn {
+          border: 2px solid transparent;
+          color: $color-white;
+          cursor: pointer;
+          padding: 10px 30px;
+          font-size: 14px;
+          font-weight: 500;
+          text-transform: capitalize;
+          transition: background-color 0.25s, border-color 0.25s, color 0.25s;
+
+          &:hover {
+            color: $color-orange;
+            border-color: $color-orange;
+          }
+
+          &.nav__btn-active {
+            background-color: $color-orange;
+            border-color: $color-orange;
+            color: $color-white;
+
+            &:hover {
+              cursor: default;
+            }
+          }
+        }
+      }
+    }
+
+    & .author {
+      color: $color-white-m;
+      font-size: 14px;
+      font-weight: 500;
+      margin-left: auto;
+      transition: color 0.25s;
+
+      &:hover {
+        color: $color-white;
+      }
+    }
+  }
+
+  &__main {
+    color: $color-white-m;
+    min-height: 100vh;
+  }
+}

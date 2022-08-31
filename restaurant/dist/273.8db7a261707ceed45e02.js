@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrestaurant=self.webpackChunkrestaurant||[]).push([[273],{273:(e,s,t)=>{e.exports=t.p+"./assets/chicken-pot-pie.png"}}]);
