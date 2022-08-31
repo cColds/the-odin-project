@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrestaurant=self.webpackChunkrestaurant||[]).push([[12],{12:(e,s,r)=>{e.exports=r.p+"./assets/15-greek-grilled-chicken-recipes.png"}}]);

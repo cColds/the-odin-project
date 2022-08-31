@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrestaurant=self.webpackChunkrestaurant||[]).push([[683],{683:(e,s,a)=>{e.exports=a.p+"./assets/air-fryer-apricot-glazed-chicken-breasts.png"}}]);

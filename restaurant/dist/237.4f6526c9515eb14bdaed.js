@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrestaurant=self.webpackChunkrestaurant||[]).push([[237],{237:(s,e,a)=>{s.exports=a.p+"./assets/aussie-chicken.png"}}]);

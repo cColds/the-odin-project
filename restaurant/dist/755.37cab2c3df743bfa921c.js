@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrestaurant=self.webpackChunkrestaurant||[]).push([[755],{755:(e,s,t)=>{e.exports=t.p+"./assets/our-20-best-new-chicken-recipes-of-2021.png"}}]);

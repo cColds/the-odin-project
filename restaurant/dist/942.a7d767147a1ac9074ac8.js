@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrestaurant=self.webpackChunkrestaurant||[]).push([[942],{942:(s,e,a)=>{s.exports=a.p+"./assets/quick-chicken-piccata.png"}}]);
