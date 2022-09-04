@@ -1,0 +1,64 @@
+@import "../../../styles/colors";
+@import "../../../styles/mixins";
+@import "../../../styles/material-symbols";
+
+.project {
+  @include no-select;
+  border-radius: 5px;
+  color: $color-white-m;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0 20px;
+  gap: 25px;
+  transition: background-color 0.25s, color 0.25s;
+
+  &__icon {
+    padding: 10px;
+    font-size: 20px;
+  }
+
+  &__name {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  &__todo-count {
+    color: $color-gray-m;
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 400;
+    transition: background-color 0.25s, color 0.25s;
+  }
+
+  &:not([class*="project_active"]) {
+    &:hover {
+      background-color: $color-dark-l;
+      color: $color-white;
+
+      & .project__todo-count {
+        color: $color-white-m;
+      }
+    }
+
+    &:active {
+      background-color: $color-action;
+      color: $color-white;
+
+      & .project__todo-count {
+        color: $color-white;
+      }
+    }
+  }
+
+  &_active {
+    background-color: $color-action;
+    color: $color-white;
+    cursor: default;
+
+    & .project__todo-count {
+      color: $color-white;
+    }
+  }
+}

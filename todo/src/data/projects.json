@@ -1,0 +1,20 @@
+{
+  "projects": [
+    {
+      "name": "Home",
+      "id": "home"
+    },
+    {
+      "name": "Work",
+      "id": "work"
+    },
+    {
+      "name": "Child",
+      "id": "child"
+    },
+    {
+      "name": "Shop",
+      "id": "shop"
+    }
+  ]
+}
