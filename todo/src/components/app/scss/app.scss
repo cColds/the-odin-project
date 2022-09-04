@@ -1,0 +1,130 @@
+@import '../../../styles/colors';
+@import '../../../styles/mixins';
+@import '../../../styles/material-symbols';
+
+.app {
+  $sidebar-width: 320px;
+
+  min-height: 100vh;
+
+  .btn {
+    border: 1px solid $color-gray-m;
+    border-radius: 5px;
+    color: $color-gray-m;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    transition: background-color .25s,
+                border .25s,
+                color .25s,
+                right .25s;
+
+    & .btn-icon {
+      font-size: 24px;
+    }
+  }
+
+  &__sidebar {
+    position: fixed;
+    z-index: 10000;
+    transition: margin-left .25s;
+
+    & .sidebar__toggle {
+      background-color: $color-dark-l;
+      border-color: transparent;
+      color: $color-gray-m;
+      position: absolute;
+      top: 30px;
+      right: 30px;
+
+      &:hover {
+        background-color: $color-gray-mx;
+        color: $color-white-m;
+      }
+
+      &:active {
+        background-color: $color-action;
+        color: $color-white;
+      }
+    }
+
+    & .sidebar__content {
+      background-color: $color-dark-s;
+      display: flex;
+      flex-direction: column;
+      width: $sidebar-width;
+      min-height: 100vh;
+
+      & .sidebar__header {
+        display: flex;
+        align-items: center;
+        padding: 30px;
+        gap: 15px;
+
+        & .header-icon {
+          background-color: $color-action;
+          border-radius: 5px;
+          padding: 5px;
+          font-size: 40px;
+        }
+
+        & .header__title {
+          font-size: 18px;
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+      }
+
+      & .sidebar__body {
+        flex-grow: 1;
+      }
+
+      & .sidebar__footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 80px;
+
+        & .footer__copyright {
+          color: $color-gray-m;
+          font-size: 13px;
+
+          & a:hover {
+            color: $color-white;
+          }
+        }
+      }
+    }
+  }
+
+  &__content {
+    margin-left: $sidebar-width;
+    transition: margin-left .25s;
+
+    & .content-wrapper {
+      width: 100%;
+      max-width: 800px;
+      padding: 60px 0;
+      margin: 0 auto;
+    }
+
+    @media screen and (max-width: 1120px) {
+      margin-left: 0;
+    }
+  }
+
+  &.sidebar-hide .app__sidebar {
+    margin-left: -$sidebar-width;
+
+    & .sidebar__toggle {
+      right: -60px;
+    }
+  }
+
+  &.sidebar-hide .app__content {
+    margin-left: 0;
+  }
+}
