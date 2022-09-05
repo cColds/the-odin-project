@@ -1,6 +1,6 @@
-@import '../../../styles/colors';
-@import '../../../styles/mixins';
-@import '../../../styles/material-symbols';
+@import "../../../styles/colors";
+@import "../../../styles/mixins";
+@import "../../../styles/material-symbols";
 
 .app {
   $sidebar-width: 320px;
@@ -17,10 +17,9 @@
     justify-content: center;
     width: 30px;
     height: 30px;
-    transition: background-color .25s,
-                border .25s,
-                color .25s,
-                right .25s;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.25s, border 0.25s, color 0.25s, right 0.25s;
 
     &:hover {
       background-color: $color-gray-mx;
@@ -34,6 +33,35 @@
       color: $color-white;
     }
 
+    &.btn_primary {
+      border-color: transparent;
+
+      &:hover {
+        background-color: transparent;
+        color: $color-gray;
+      }
+
+      &:active {
+        background-color: transparent;
+        color: $color-white;
+      }
+    }
+
+    &.btn_critical {
+      background-color: $color-critical;
+      border-color: $color-critical-l;
+      color: $color-critical-l;
+
+      &:hover {
+        background-color: $color-critical-l;
+        color: $color-white-m;
+      }
+
+      &:active {
+        color: $color-white;
+      }
+    }
+
     & .btn-icon {
       font-size: 20px;
     }
@@ -42,7 +70,7 @@
   &__sidebar {
     position: fixed;
     z-index: 10000;
-    transition: margin-left .25s;
+    transition: margin-left 0.25s;
 
     & .sidebar__toggle {
       background-color: $color-dark-l;
@@ -136,7 +164,7 @@
 
   &__content {
     margin-left: $sidebar-width;
-    transition: margin-left .25s;
+    transition: margin-left 0.25s;
 
     & .content-wrapper {
       width: 100%;
