@@ -25,7 +25,13 @@
   }
 
   &__todo-count {
-    color: $color-gray-m;
+    background-color: $color-dark-l;
+    border-radius: 5px;
+    color: $color-gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
     margin-left: auto;
     font-size: 12px;
     font-weight: 400;
@@ -47,6 +53,7 @@
       color: $color-white;
 
       & .project__todo-count {
+        background-color: $color-action;
         color: $color-white;
       }
     }
@@ -58,6 +65,7 @@
     cursor: default;
 
     & .project__todo-count {
+      background-color: $color-action;
       color: $color-white;
     }
   }
