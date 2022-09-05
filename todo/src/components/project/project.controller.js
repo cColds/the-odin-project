@@ -5,6 +5,18 @@ export default class ProjectController {
     self.view = view;
   }
 
+  get name() {
+    const self = this;
+
+    return self.module.name;
+  }
+
+  get events() {
+    const self = this;
+
+    return self.module.events;
+  }
+
   getTodos() {
     const self = this;
 

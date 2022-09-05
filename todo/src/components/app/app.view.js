@@ -1,5 +1,3 @@
-import Project from '../project/project';
-
 export default class AppView {
   constructor(module) {
     const self = this;
@@ -12,29 +10,28 @@ export default class AppView {
     self.module.events
       .subscribe('render', ({ node, appendType }) => self.render({ node, appendType }))
       .subscribe('toggleSidebar', (state) => self.toggleSidebar(state))
-      .subscribe('changeProject', ({ prev, active }) => self.changeProject({ prev, active }))
-      .subscribe('changeProject', ({ active: projectId }) => self.loadProject(projectId));
+      .subscribe('createProject', ({ project, type }) => self.createProject({ project, type }))
+      .subscribe('changeProject', ({ prevId, activeId }) => self.changeProject({ prevId, activeId }))
+      .subscribe('loadProject', (project) => self.loadProject(project));
   }
 
-  loadProject(projectId) {
-    const self = this;
-    const { projects } = self.components;
-    const project = projects[projectId];
-    const todos = project.controller.getTodos();
-
-    console.table(todos);
-  }
-
-  changeProject({ prev, active }) {
+  loadProject(project) {
     const self = this;
     const { contentBody } = self.elements;
+    const todos = project.controller.getTodos();
 
-    if (prev) {
-      self.components.projects[prev].controller.setActive(false);
-    }
+    contentBody.style.whiteSpace = 'pre-line';
+    contentBody.innerHTML = `
+      ${project.controller.name}\n\n
+      ${todos.map((todo) => `${todo.title} - ${todo.description}`).join('\n')}
+    `;
+  }
 
-    self.components.projects[active].controller.setActive(true);
-    contentBody.textContent = active;
+  changeProject({ prevId, activeId }) {
+    const self = this;
+
+    self.module.projects[prevId]?.controller.setActive(false);
+    self.module.projects[activeId].controller.setActive(true);
   }
 
   toggleSidebar(state) {
@@ -48,71 +45,22 @@ export default class AppView {
     }
   }
 
-  createProject({
-    name,
-    iconType,
-    id,
-    filter,
-    node,
-  }) {
-    const self = this;
-    const listItem = document.createElement('li');
-    const project = new Project({
-      name,
-      iconType,
-      id,
-      filter,
-    });
-
-    listItem.classList.add('project-list__item');
-    self.components.projects[id] = project;
-
-    project.controller.render({ node: listItem });
-    project.controller.module.events.subscribe('click', () => self.module.changeProject(id));
-
-    node.append(listItem);
-  }
-
-  createDefaultProjects() {
+  createProject({ project, type }) {
     const self = this;
     const { projectList } = self.elements;
+    const listItem = document.createElement('li');
 
-    self.createProject({
-      name: 'Inbox',
-      iconType: 'inbox',
-      id: 'inbox',
-      node: projectList.default,
-    });
+    listItem.classList.add('project-list__item');
 
-    self.createProject({
-      name: 'Today',
-      iconType: 'today',
-      id: 'today',
-      filter: (todos) => todos.filter(({ 'due-date': dueDate }) => dueDate === '00.00.00'),
-      node: projectList.default,
-    });
+    project.controller.render({ node: listItem });
 
-    self.createProject({
-      name: 'Week',
-      iconType: 'date_range',
-      id: 'week',
-      filter: (todos) => todos.filter(({ 'due-date': dueDate }) => dueDate === '00.00.01'),
-      node: projectList.default,
-    });
-
-    self.createProject({
-      name: 'Month',
-      iconType: 'calendar_month',
-      id: 'month',
-      filter: (todos) => todos.filter(({ 'due-date': dueDate }) => dueDate === '00.00.02'),
-      node: projectList.default,
-    });
+    projectList?.[type].append(listItem);
   }
 
   render({ node, appendType }) {
     const self = this;
     const { app } = self.elements;
-    const { sidebarState } = self.module;
+    // const { sidebarState } = self.module;
 
     if (!(node instanceof HTMLElement)) {
       throw new Error('Can\'t rendering, bad node');
@@ -179,13 +127,5 @@ export default class AppView {
       user: self.elements.sidebarBody.querySelector('#user-project-list'),
     };
     self.elements.createProjectBtn = self.elements.sidebarBody.querySelector('#create-project');
-
-    self.createDefaultProjects();
-
-    if (!sidebarState) {
-      self.toggleSidebar(sidebarState);
-    }
-
-    self.module.changeProject('inbox');
   }
 }
