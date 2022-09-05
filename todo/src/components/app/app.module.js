@@ -1,6 +1,6 @@
 import PubSub from '../../libs/pubSub';
-
 import Project from '../project/project';
+import Modal from '../modal/modal';
 
 export default class AppModule {
   constructor() {
@@ -9,6 +9,7 @@ export default class AppModule {
     self.sidebarState = true;
     self.activeProjectId = null;
     self.projects = {};
+    self.modal = null;
   }
 
   toggleSidebar(state) {
@@ -27,6 +28,14 @@ export default class AppModule {
 
     self.events.publish('changeProject', { prevId: prevProjectId, activeId: self.activeProjectId });
     self.events.publish('loadProject', self.projects[self.activeProjectId]);
+  }
+
+  createModal() {
+    const self = this;
+
+    self.modal = new Modal().controller;
+
+    self.events.publish('createModal', self.modal);
   }
 
   createProject({

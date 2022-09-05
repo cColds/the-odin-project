@@ -12,7 +12,8 @@ export default class AppView {
       .subscribe('toggleSidebar', (state) => self.toggleSidebar(state))
       .subscribe('createProject', ({ project, type }) => self.createProject({ project, type }))
       .subscribe('changeProject', ({ prevId, activeId }) => self.changeProject({ prevId, activeId }))
-      .subscribe('loadProject', (project) => self.loadProject(project));
+      .subscribe('loadProject', (project) => self.loadProject(project))
+      .subscribe('createModal', (modal) => self.createModal(modal));
   }
 
   loadProject(project) {
@@ -43,6 +44,13 @@ export default class AppView {
     } else {
       app.classList.add('sidebar-hide');
     }
+  }
+
+  createModal(modal) {
+    const self = this;
+    const { app } = self.elements;
+
+    modal.render({ node: app });
   }
 
   createProject({ project, type }) {

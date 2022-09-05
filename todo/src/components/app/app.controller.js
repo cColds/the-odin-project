@@ -7,6 +7,12 @@ export default class AppController {
     self.view = view;
   }
 
+  get modal() {
+    const self = this;
+
+    return self.module.modal;
+  }
+
   createProject({
     name,
     iconType = 'list_alt',
@@ -39,11 +45,23 @@ export default class AppController {
     self.module.events.publish('render', { node, appendType });
 
     const { sidebarState } = self.module;
-    const { sidebarToggle } = self.view.elements;
+    const { sidebarToggle, createProjectBtn } = self.view.elements;
 
     self.toggleSidebar(sidebarState);
+
     projects.forEach((project) => self.createProject(project));
     self.changeProject('inbox');
+
+    self.module.createModal();
+
     sidebarToggle.addEventListener('click', () => self.toggleSidebar(!self.module.sidebarState));
+    createProjectBtn.addEventListener('click', () => {
+      self.modal.setContent({
+        title: 'Create Project',
+        submit: () => console.log('app.controller - submit'),
+        reset: () => console.log('app.controller - reset'),
+      });
+      self.modal.open();
+    });
   }
 }
