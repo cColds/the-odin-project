@@ -27,7 +27,9 @@ h6 {
   font-family: 'Nunito', sans-serif;
 }
 
-button {
+button,
+input,
+textarea {
   background: none;
   border: none;
   border-radius: 0;
@@ -47,6 +49,18 @@ ul,
 ol,
 li {
   list-style: none;
+}
+
+input,
+textarea {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+textarea {
+  resize: none;
 }
 
 body {
