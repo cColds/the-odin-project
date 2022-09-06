@@ -20,10 +20,16 @@ export default class ProjectView {
     const self = this;
     const { projectIcon, porjectName, todoCount } = self.elements;
     const { name, iconType } = self.module;
+    const todosLength = self.module.getTodos().length;
 
     projectIcon.textContent = iconType;
     porjectName.textContent = name;
-    todoCount.textContent = self.module.getTodos().length;
+
+    if (todosLength > 99) {
+      todoCount.textContent = '99+';
+    } else {
+      todoCount.textContent = todosLength;
+    }
   }
 
   render({ node, appendType }) {

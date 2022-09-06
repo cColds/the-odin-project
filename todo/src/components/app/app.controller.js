@@ -57,14 +57,17 @@ export default class AppController {
 
     sidebarToggle.addEventListener('click', () => self.toggleSidebar(!self.module.sidebarState));
     createProjectBtn.addEventListener('click', () => {
-      const createProjectFrom = new Form({ type: 'create-task', id: 'modal__form' }).controller;
+      const createProjectFrom = new Form({ type: 'create-project', id: 'modal__form' }).controller;
 
       self.modal.setContent({
         title: 'Create Project',
         bodyRender: createProjectFrom,
         submit: () => {
-          const { values } = createProjectFrom;
-          console.table(values);
+          const { values: { title } } = createProjectFrom;
+
+          if (title.trim().length > 3) {
+            self.createProject({ name: title });
+          }
 
           return true;
         },

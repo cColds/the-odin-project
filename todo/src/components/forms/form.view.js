@@ -1,4 +1,5 @@
 import DatePicker from '../datePicker/datePicker';
+import Dropdown from '../dropdown/dropdown';
 
 export default class FormView {
   constructor(module) {
@@ -70,11 +71,18 @@ export default class FormView {
       classList: ['input'],
     });
 
+    const dropdown = new Dropdown().controller;
+    dropdown.render({
+      node: form.querySelectorAll('.input-block')[4],
+      classList: ['input'],
+    });
+
     self.elements.inputs = {
       title: form.querySelector('#task-title'),
       description: form.querySelector('#task-description'),
       priority: form.querySelector('[name=task-priority]:checked'),
       dueDate: datePicker,
+      project: dropdown,
     };
   }
 

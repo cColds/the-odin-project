@@ -14,17 +14,18 @@
   gap: 25px;
   transition: background-color 0.25s, color 0.25s;
 
-  &__icon {
+  & .project__icon {
     padding: 10px;
     font-size: 20px;
   }
 
-  &__name {
+  & .project__name {
+    @include text-overflow;
     font-size: 14px;
     font-weight: 500;
   }
 
-  &__todo-count {
+  & .project__todo-count {
     background-color: $color-dark-l;
     border-radius: 5px;
     color: $color-gray;
