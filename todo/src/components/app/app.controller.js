@@ -1,4 +1,5 @@
 import projects from '../../modules/projects';
+import Form from '../forms/form';
 
 export default class AppController {
   constructor(module, view) {
@@ -56,10 +57,17 @@ export default class AppController {
 
     sidebarToggle.addEventListener('click', () => self.toggleSidebar(!self.module.sidebarState));
     createProjectBtn.addEventListener('click', () => {
+      const createProjectFrom = new Form({ type: 'create-task', id: 'modal__form' }).controller;
+
       self.modal.setContent({
         title: 'Create Project',
-        submit: () => console.log('app.controller - submit'),
-        reset: () => console.log('app.controller - reset'),
+        bodyRender: createProjectFrom,
+        submit: () => {
+          const { values } = createProjectFrom;
+          console.table(values);
+
+          return true;
+        },
       });
       self.modal.open();
     });
