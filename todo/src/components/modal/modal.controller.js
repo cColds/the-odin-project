@@ -26,13 +26,14 @@ export default class ModalController {
   setContent({
     title = 'Modal',
     isCritical = false,
+    bodyRender = null,
     submit = null,
     reset = null,
   }) {
     const self = this;
 
     self.module.setContent({
-      title, isCritical, submit, reset,
+      title, isCritical, bodyRender, submit, reset,
     });
   }
 
@@ -43,27 +44,31 @@ export default class ModalController {
 
     const {
       overlay,
-      modalContainer,
       closeBtn,
       resetBtn,
       submitBtn,
     } = self.view.elements;
 
-    modalContainer.addEventListener('submit', (e) => e.preventDefault());
-
     overlay.addEventListener('click', () => self.close());
     closeBtn.addEventListener('click', () => self.close());
     resetBtn.addEventListener('click', () => {
-      self.module?.reset();
-      self.close();
+      if (typeof self.module.reset === 'function') {
+        self.module.reset();
+      }
 
+      self.close();
       self.events.publish('reset');
     });
     submitBtn.addEventListener('click', () => {
-      self.module?.submit();
-      self.close();
-
-      self.events.publish('submit');
+      if (typeof self.module.submit === 'function') {
+        if (self.module.submit()) {
+          self.close();
+          self.events.publish('submit');
+        }
+      } else {
+        self.close();
+        self.events.publish('submit');
+      }
     });
   }
 }

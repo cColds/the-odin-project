@@ -7,8 +7,7 @@ export default class ModalView {
     self.module.events
       .subscribe('render', ({ node, appendType }) => self.render({ node, appendType }))
       .subscribe('close', () => self.close())
-      .subscribe('open', () => self.open())
-      .subscribe('setContent', ({ title, isCritical }) => self.setContent({ title, isCritical }));
+      .subscribe('open', () => self.open());
   }
 
   close() {
@@ -20,14 +19,16 @@ export default class ModalView {
 
   open() {
     const self = this;
-    const { modal } = self.elements;
+    const { modal, modalBody } = self.elements;
 
+    modalBody.innerHTML = '';
+    self.setContent(self.module);
     modal.classList.add('modal_open');
   }
 
-  setContent({ title, isCritical }) {
+  setContent({ title, isCritical, bodyRender }) {
     const self = this;
-    const { modalTitle, submitBtn } = self.elements;
+    const { modalTitle, modalBody, submitBtn } = self.elements;
 
     modalTitle.textContent = title;
 
@@ -35,6 +36,10 @@ export default class ModalView {
       submitBtn.classList.add('btn_critical');
     } else {
       submitBtn.classList.remove('btn_critical');
+    }
+
+    if (bodyRender) {
+      bodyRender.render({ node: modalBody });
     }
   }
 
@@ -58,7 +63,7 @@ export default class ModalView {
     self.elements.modal.innerHTML = `
       <div class="modal-overlay"></div>
 
-      <form class="modal-container">
+      <div class="modal-container">
         <div class="modal__header">
           <h2 class="modal__title">Modal Title</h2>
 
@@ -70,15 +75,16 @@ export default class ModalView {
         <div class="modal__body"></div>
 
         <div class="modal__footer">
-          <button class="btn btn_primary" type="reset" aria-label="Cancel">Cancel</button>
-          <button class="btn" type="submit" aria-label="Create">Create</button>
+          <button class="btn btn_primary" type="reset" form="modal__form" aria-label="Cancel">Cancel</button>
+          <button class="btn" type="submit" form="modal__form" aria-label="Create">Create</button>
         </div>
-      </form>
+      </div>
     `;
 
     self.elements.overlay = self.elements.modal.querySelector('.modal-overlay');
     self.elements.modalContainer = self.elements.modal.querySelector('.modal-container');
     self.elements.modalTitle = self.elements.modalContainer.querySelector('.modal__title');
+    self.elements.modalBody = self.elements.modalContainer.querySelector('.modal__body');
     self.elements.closeBtn = self.elements.modalContainer.querySelector('.modal__close-btn');
     self.elements.resetBtn = self.elements.modalContainer.querySelector('[type=reset]');
     self.elements.submitBtn = self.elements.modalContainer.querySelector('[type=submit]');

@@ -11,15 +11,14 @@ export default class ModalModule {
   }
 
   setContent({
-    title, isCritical, submit, reset,
+    title, isCritical, bodyRender, submit, reset,
   }) {
     const self = this;
 
     self.title = title;
     self.isCritical = isCritical;
+    self.bodyRender = bodyRender;
     self.submit = submit;
     self.reset = reset;
-
-    self.events.publish('setContent', { title, isCritical });
   }
 }
