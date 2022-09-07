@@ -1,5 +1,6 @@
-import projects from '../../modules/projects';
 import Form from '../forms/form';
+import defautlProjects from './data/defautlProjects';
+import storage from '../../modules/storage';
 
 export default class AppController {
   constructor(module, view) {
@@ -20,13 +21,18 @@ export default class AppController {
     id = crypto.randomUUID(),
     filter = null,
     type = 'user',
+    options: {
+      deleted = true,
+      edited = true,
+      added = true,
+    } = {},
   }) {
     const self = this;
     const project = self.module.createProject({
-      name, iconType, id, filter, type,
+      name, iconType, id, filter, type, options: { deleted, edited, added },
     });
 
-    project.controller.events.subscribe('click', () => self.changeProject(id));
+    project.events.subscribe('click', () => self.changeProject(id));
   }
 
   changeProject(projectId) {
@@ -50,7 +56,8 @@ export default class AppController {
 
     self.toggleSidebar(sidebarState);
 
-    projects.forEach((project) => self.createProject(project));
+    defautlProjects.forEach((project) => self.createProject(project));
+    storage.load('projects').then((userProjects) => userProjects.forEach((project) => self.createProject(project)));
     self.changeProject('inbox');
 
     self.module.createModal();
