@@ -76,7 +76,7 @@ export default class ModalView {
 
         <div class="modal__footer">
           <button class="btn btn_primary" type="reset" form="modal__form" aria-label="Cancel">Cancel</button>
-          <button class="btn" type="submit" form="modal__form" aria-label="Create">Create</button>
+          <button class="btn" type="submit" form="modal__form" aria-label="Confirm">Confirm</button>
         </div>
       </div>
     `;
