@@ -1,6 +1,8 @@
 import PubSub from '../../libs/pubSub';
 import Project from '../project/project';
 import Modal from '../modal/modal';
+import appData from './module/appData';
+import storage from '../../modules/storage';
 
 export default class AppModule {
   constructor() {
@@ -38,25 +40,20 @@ export default class AppModule {
     self.events.publish('createModal', self.modal);
   }
 
-  createProject({
-    name,
-    iconType,
-    id,
-    filter,
-    type,
-  }) {
+  createProject(project) {
     const self = this;
-    const project = new Project({
-      name,
-      iconType,
-      id,
-      filter,
-    });
+    const newProject = new Project(project).controller;
 
-    self.projects[id] = project;
+    self.projects[project.id] = newProject;
 
-    self.events.publish('createProject', { project, type });
+    appData.addProject(project);
 
-    return project;
+    if (project.type === 'user') {
+      storage.save('projects', appData.getUserProjects());
+    }
+
+    self.events.publish('createProject', { project: newProject, type: project.type });
+
+    return newProject;
   }
 }
