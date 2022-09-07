@@ -30,6 +30,14 @@ export default class ProjectController {
     };
   }
 
+  set name(newName) {
+    const self = this;
+
+    self.module.name = newName;
+
+    self.update();
+  }
+
   update() {
     const self = this;
 
