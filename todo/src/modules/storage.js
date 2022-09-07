@@ -7,6 +7,6 @@ export default {
     const data = await localStorage.getItem(key);
     const res = await JSON.parse(data);
 
-    return res;
+    return res || [];
   },
 };
