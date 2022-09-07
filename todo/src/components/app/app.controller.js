@@ -1,5 +1,7 @@
 import Form from '../forms/form';
 import defautlProjects from './data/defautlProjects';
+import defaultTodo from './data/defaultTodo.json';
+import appData from './module/appData';
 import storage from '../../modules/storage';
 
 export default class AppController {
@@ -15,21 +17,47 @@ export default class AppController {
     return self.module.modal;
   }
 
+  createTodo({
+    id = crypto.randomUUID(),
+    title,
+    description,
+    dueDate = null,
+    priority = 0,
+    projectId,
+    isCompleted = false,
+    isExpired = false,
+  }) {
+    const self = this;
+    const todo = self.module.createTodo({
+      id, title, description, dueDate, priority, projectId, isCompleted, isExpired,
+    });
+
+    todo.events.subscribe('update', () => storage.save('todos', appData.getTodos()));
+  }
+
   createProject({
+    id = crypto.randomUUID(),
     name,
     iconType = 'list_alt',
-    id = crypto.randomUUID(),
     filter = null,
     type = 'user',
     options: {
       deleted = true,
       edited = true,
       added = true,
+      todoParent = false,
     } = {},
   }) {
     const self = this;
     const project = self.module.createProject({
-      name, iconType, id, filter, type, options: { deleted, edited, added },
+      id,
+      name,
+      iconType,
+      filter,
+      type,
+      options: {
+        deleted, edited, added, todoParent,
+      },
     });
 
     project.events.subscribe('click', () => self.changeProject(id));
@@ -39,6 +67,10 @@ export default class AppController {
     const self = this;
 
     self.module.changeProject(projectId);
+
+    const { todos } = self.module.projects[projectId];
+
+    todos.forEach((todo) => self.createTodo(todo));
   }
 
   toggleSidebar(state) {
@@ -54,13 +86,11 @@ export default class AppController {
     const { sidebarState } = self.module;
     const { sidebarToggle, createProjectBtn } = self.view.elements;
 
+    self.module.createModal();
     self.toggleSidebar(sidebarState);
 
     defautlProjects.forEach((project) => self.createProject(project));
-    storage.load('projects').then((userProjects) => userProjects.forEach((project) => self.createProject(project)));
     self.changeProject('inbox');
-
-    self.module.createModal();
 
     sidebarToggle.addEventListener('click', () => self.toggleSidebar(!self.module.sidebarState));
     createProjectBtn.addEventListener('click', () => {
@@ -74,12 +104,23 @@ export default class AppController {
 
           if (title.trim().length > 3) {
             self.createProject({ name: title });
+
+            storage.save('projects', appData.getUserProjects());
           }
 
           return true;
         },
       });
       self.modal.open();
+    });
+
+    storage.load('projects').then((userProjects) => userProjects.forEach((project) => self.createProject(project)));
+    storage.load('todos').then((todos) => {
+      if (todos.length === 0) {
+        defaultTodo.todos.forEach((todo) => self.createTodo(todo));
+      } else {
+        todos.forEach((todo) => self.createTodo(todo));
+      }
     });
   }
 }

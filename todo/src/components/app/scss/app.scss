@@ -114,6 +114,42 @@
       margin: 0 auto;
     }
 
+    & .project__header {
+      border-bottom: 1px solid $color-gray-mx;
+      display: flex;
+      align-items: center;
+      height: 80px;
+      padding: 0 30px;
+
+      & .project__icon {
+        color: $color-white;
+        font-size: 28px;
+      }
+
+      & .project__title {
+        @include text-overflow;
+        color: $color-white;
+        font-size: 24px;
+        margin-left: 15px;
+        margin-right: 30px;
+      }
+
+      & .project__controls {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        gap: 15px;
+      }
+    }
+
+    & .todo__list {
+      margin-top: 30px;
+
+      & li + li {
+        margin-top: 15px;
+      }
+    }
+
     @media screen and (max-width: 1120px) {
       margin-left: 0;
     }
@@ -141,7 +177,9 @@
   align-items: center;
   justify-content: center;
   width: 30px;
+  min-width: 30px;
   height: 30px;
+  min-height: 30px;
   font-size: 14px;
   font-weight: 500;
   transition: background-color 0.25s, border 0.25s, color 0.25s, right 0.25s;
@@ -181,6 +219,10 @@
     &:active {
       color: $color-white;
     }
+
+    &:active {
+      background-color: $color-remember-l;
+    }
   }
 
   &.btn_important {
@@ -192,6 +234,10 @@
     &:active {
       color: $color-white;
     }
+
+    &:active {
+      background-color: $color-important-l;
+    }
   }
 
   &.btn_critical {
@@ -201,6 +247,40 @@
 
     &:hover,
     &:active {
+      color: $color-white;
+    }
+
+    &:active {
+      background-color: $color-critical-l;
+    }
+  }
+
+  &.btn_active {
+    background-color: $color-action;
+    border-color: $color-action;
+    color: $color-white;
+
+    &.btn_primary {
+      background-color: transparent;
+      border-color: transparent;
+      color: $color-white;
+    }
+
+    &.btn_remember {
+      background-color: $color-remember-l;
+      border-color: $color-remember-l;
+      color: $color-white;
+    }
+
+    &.btn_important {
+      background-color: $color-important-l;
+      border-color: $color-important-l;
+      color: $color-white;
+    }
+
+    &.btn_critical {
+      background-color: $color-critical-l;
+      border-color: $color-critical-l;
       color: $color-white;
     }
   }

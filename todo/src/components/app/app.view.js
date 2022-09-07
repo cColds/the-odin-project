@@ -12,7 +12,7 @@ export default class AppView {
       .subscribe('toggleSidebar', (state) => self.toggleSidebar(state))
       .subscribe('createProject', ({ project, type }) => self.createProject({ project, type }))
       .subscribe('changeProject', ({ prevId, activeId }) => self.changeProject({ prevId, activeId }))
-      .subscribe('loadProject', (project) => self.loadProject(project))
+      .subscribe('createTodo', (todo) => self.createTodo(todo))
       .subscribe('createModal', (modal) => self.createModal(modal));
   }
 
@@ -34,21 +34,59 @@ export default class AppView {
     modal.render({ node: app });
   }
 
+  createTodo(todo) {
+    const self = this;
+    const { todoList } = self.elements;
+    const listItem = document.createElement('li');
+
+    listItem.classList.add('list-item');
+
+    todo.render({ node: listItem });
+
+    todoList.append(listItem);
+  }
+
   loadProject(project) {
     const self = this;
     const { contentBody } = self.elements;
-    const todos = project.getTodos();
+    const { added, deleted, edited } = project.data.options;
 
-    contentBody.style.whiteSpace = 'pre-line';
-    contentBody.innerHTML = `${project.name}\n
-      --------------------------------------------------------------------------
-      deleted: ${project.options.deleted}\n
-      edited: ${project.options.edited}\n
-      added: ${project.options.added}
-      --------------------------------------------------------------------------
+    /* eslint-disable indent */
+    contentBody.innerHTML = `
+      <header class="project__header">
+        <span class="material-symbols-rounded project__icon">${project.data.iconType}</span>
+        <h2 class="project__title">${project.data.name}</h2>
+        <div class="project__controls">
+          ${
+            added ? `<button id="add-todo-btn" class="btn" type="button" aria-label="Add Todo">
+              <span class="material-symbols-rounded project__add-todo-btn">add</span>
+            </button>`
+            : ''
+          }
+          ${
+            deleted ? `<button id="edit-project-btn" class="btn" type="button" aria-label="Edit Project">
+              <span class="material-symbols-rounded project__edit-btn">edit</span>
+            </button>`
+            : ''
+          }
+          ${
+            edited ? `<button id="delete-project-btn" class="btn btn_critical" type="button" aria-label="Delete Project">
+              <span class="material-symbols-rounded project__delete-btn">delete</span>
+            </button>`
+            : ''
+          }
+        </div>
+      </header>
 
-      ${todos.map((todo) => `${todo.title} - ${todo.description}`).join('\n')}
+      <ul class="todo__list"></ul>
     `;
+
+    self.elements.projectHeaderBtn = {
+      add: self.elements.contentBody.querySelector('#add-todo-btn'),
+      edit: self.elements.contentBody.querySelector('#edit-project-btn'),
+      delete: self.elements.contentBody.querySelector('#delete-project-btn'),
+    };
+    self.elements.todoList = self.elements.contentBody.querySelector('.todo__list');
   }
 
   changeProject({ prevId, activeId }) {
@@ -56,6 +94,8 @@ export default class AppView {
 
     self.module.projects[prevId]?.setActive(false);
     self.module.projects[activeId].setActive(true);
+
+    self.loadProject(self.module.projects[activeId]);
   }
 
   createProject({ project, type }) {

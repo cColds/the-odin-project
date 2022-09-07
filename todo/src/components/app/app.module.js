@@ -1,8 +1,8 @@
 import PubSub from '../../libs/pubSub';
 import Project from '../project/project';
+import Todo from '../todo/todo';
 import Modal from '../modal/modal';
 import appData from './module/appData';
-import storage from '../../modules/storage';
 
 export default class AppModule {
   constructor() {
@@ -11,7 +11,15 @@ export default class AppModule {
     self.sidebarState = true;
     self.activeProjectId = null;
     self.projects = {};
+    self.todos = {};
     self.modal = null;
+  }
+
+  updateProjects() {
+    const self = this;
+    const { projects } = self;
+
+    Object.keys(projects).forEach((key) => projects[key].update());
   }
 
   toggleSidebar(state) {
@@ -22,16 +30,6 @@ export default class AppModule {
     self.events.publish('toggleSidebar', self.sidebarState);
   }
 
-  changeProject(projectId) {
-    const self = this;
-    const prevProjectId = self.activeProjectId;
-
-    self.activeProjectId = projectId;
-
-    self.events.publish('changeProject', { prevId: prevProjectId, activeId: self.activeProjectId });
-    self.events.publish('loadProject', self.projects[self.activeProjectId]);
-  }
-
   createModal() {
     const self = this;
 
@@ -40,17 +38,39 @@ export default class AppModule {
     self.events.publish('createModal', self.modal);
   }
 
+  createTodo(todo) {
+    const self = this;
+    const newTodo = new Todo(todo).controller;
+
+    self.todos[todo.id] = newTodo;
+
+    appData.addTodo(newTodo);
+
+    self.updateProjects();
+
+    self.events.publish('createTodo', newTodo);
+
+    return newTodo;
+  }
+
+  changeProject(projectId) {
+    const self = this;
+    const prevProjectId = self.activeProjectId;
+
+    self.activeProjectId = projectId;
+
+    appData.setActiveProjectId(self.activeProjectId);
+
+    self.events.publish('changeProject', { prevId: prevProjectId, activeId: self.activeProjectId });
+  }
+
   createProject(project) {
     const self = this;
     const newProject = new Project(project).controller;
 
     self.projects[project.id] = newProject;
 
-    appData.addProject(project);
-
-    if (project.type === 'user') {
-      storage.save('projects', appData.getUserProjects());
-    }
+    appData.addProject(newProject);
 
     self.events.publish('createProject', { project: newProject, type: project.type });
 

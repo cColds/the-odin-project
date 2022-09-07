@@ -1,28 +1,51 @@
 export default {
-  projectList: [],
-  todosList: [],
+  projectList: {},
+  todosList: {},
+  activeProjectId: null,
 
-  addProject({
-    name, iconType, id, type,
-  }) {
-    this.projectList.push({
-      name, iconType, id, type,
-    });
+  setActiveProjectId(projectId) {
+    this.activeProjectId = projectId;
+  },
+
+  addProject(project) {
+    const { id } = project.data;
+
+    if (!this.projectList[id]) {
+      this.projectList[id] = project;
+    }
   },
 
   addTodo(todo) {
-    this.todosList.push(todo);
+    const { id } = todo.data;
+
+    if (!this.todosList[id]) {
+      this.todosList[id] = todo;
+    }
+  },
+
+  getActiveProjectId() {
+    return this.activeProjectId;
   },
 
   getProjects() {
-    return [...this.projectList];
+    const keys = Object.keys(this.projectList);
+
+    return keys.map((key) => this.projectList[key].data);
+  },
+
+  getProject(projectId) {
+    return this.projectList[projectId].data;
   },
 
   getUserProjects() {
-    return this.projectList.filter(({ type }) => type === 'user');
+    const projectList = this.getProjects();
+
+    return projectList.filter(({ type }) => type === 'user') || [];
   },
 
   getTodos() {
-    return [...this.todosList];
+    const keys = Object.keys(this.todosList);
+
+    return keys.map((key) => this.todosList[key].data);
   },
 };
