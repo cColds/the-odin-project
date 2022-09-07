@@ -2,18 +2,19 @@ import PubSub from '../../libs/pubSub';
 import dataTodo from '../../data/todo.json';
 
 export default class ProjectModule {
-  constructor({
-    name,
-    iconType,
-    id,
-    filter,
-  }) {
+  constructor(project) {
     const self = this;
     self.events = new PubSub();
-    self.name = name;
-    self.iconType = iconType;
-    self.id = id;
-    self.filter = filter;
+    self.name = project.name;
+    self.iconType = project.iconType;
+    self.id = project.id;
+    self.filter = project.filter;
+    self.type = project.type;
+    self.options = {
+      deleted: project.options?.deleted,
+      edited: project.options?.edited,
+      added: project.options?.added,
+    };
     self.isActive = false;
   }
 

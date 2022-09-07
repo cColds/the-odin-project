@@ -17,6 +17,12 @@ export default class ProjectController {
     return self.module.events;
   }
 
+  get options() {
+    const self = this;
+
+    return self.module.options;
+  }
+
   getTodos() {
     const self = this;
 
