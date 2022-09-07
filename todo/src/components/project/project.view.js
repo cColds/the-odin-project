@@ -6,7 +6,8 @@ export default class ProjectView {
 
     self.module.events
       .subscribe('render', ({ node, appendType }) => self.render({ node, appendType }))
-      .subscribe('setActive', (state) => self.setActive(state));
+      .subscribe('setActive', (state) => self.setActive(state))
+      .subscribe('update', () => self.update());
   }
 
   setActive(state) {

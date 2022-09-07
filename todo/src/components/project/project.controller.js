@@ -5,28 +5,35 @@ export default class ProjectController {
     self.view = view;
   }
 
-  get name() {
-    const self = this;
-
-    return self.module.name;
-  }
-
   get events() {
     const self = this;
 
     return self.module.events;
   }
 
-  get options() {
-    const self = this;
-
-    return self.module.options;
-  }
-
-  getTodos() {
+  get todos() {
     const self = this;
 
     return self.module.getTodos();
+  }
+
+  get data() {
+    const self = this;
+
+    return {
+      name: self.module.name,
+      iconType: self.module.iconType,
+      id: self.module.id,
+      filter: self.module.filter,
+      type: self.module.type,
+      options: self.module.options,
+    };
+  }
+
+  update() {
+    const self = this;
+
+    self.events.publish('update');
   }
 
   setActive(state) {

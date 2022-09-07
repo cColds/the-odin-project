@@ -1,5 +1,5 @@
 import PubSub from '../../libs/pubSub';
-import dataTodo from '../../data/todo.json';
+import appData from '../app/module/appData';
 
 export default class ProjectModule {
   constructor(project) {
@@ -14,6 +14,7 @@ export default class ProjectModule {
       deleted: project.options?.deleted,
       edited: project.options?.edited,
       added: project.options?.added,
+      todoParent: project.options?.todoParent,
     };
     self.isActive = false;
   }
@@ -30,9 +31,9 @@ export default class ProjectModule {
     const self = this;
 
     if (self.filter) {
-      return self.filter(dataTodo.todos);
+      return self.filter(appData.getTodos());
     }
 
-    return dataTodo.todos.filter(({ 'parent-id': parentId }) => parentId === self.id);
+    return appData.getTodos().filter(({ projectId }) => projectId === self.id);
   }
 }
