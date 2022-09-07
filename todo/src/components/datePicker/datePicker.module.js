@@ -27,15 +27,7 @@ export default class DatePickerModule {
   getValueText() {
     const self = this;
 
-    return self.value
-      .toLocaleString(
-        'en',
-        {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-        },
-      ).replace(/\//g, '.');
+    return vdate.dateToText(self.value);
   }
 
   getCalendarText() {
