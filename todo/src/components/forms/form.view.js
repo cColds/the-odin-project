@@ -14,6 +14,7 @@ export default class FormView {
   renderCreateProject() {
     const self = this;
     const { form } = self.elements;
+    const { placeholder } = self.module;
 
     form.innerHTML = `
       <div class="input-block">
@@ -21,6 +22,8 @@ export default class FormView {
         <input id="project-name" class="input" type="text" name="project-name" placeholder="Project name">
       </div>
     `;
+
+    form.querySelector('#project-name').value = placeholder?.name || null;
   }
 
   renderCreateTask() {
@@ -71,7 +74,10 @@ export default class FormView {
       classList: ['input'],
     });
 
-    const dropdown = new Dropdown().controller;
+    const dropdown = new Dropdown({
+      items: [
+      ],
+    }).controller;
     dropdown.render({
       node: form.querySelectorAll('.input-block')[4],
       classList: ['input'],
@@ -89,8 +95,9 @@ export default class FormView {
   renderMessage() {
     const self = this;
     const { form } = self.elements;
+    const { message } = self.module;
 
-    return form;
+    form.innerHTML = `<p class="message">${message}<p>`;
   }
 
   render({ node, appendType }) {

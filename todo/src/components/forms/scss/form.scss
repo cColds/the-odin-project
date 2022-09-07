@@ -15,6 +15,12 @@
     }
   }
 
+  & .message {
+    color: $color-white-m;
+    font-size: 14px;
+    text-align: center;
+  }
+
   & .radio-block {
     display: flex;
     gap: 15px;

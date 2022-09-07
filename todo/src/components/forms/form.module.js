@@ -1,10 +1,12 @@
 import PubSub from '../../libs/pubSub';
 
 export default class FormModule {
-  constructor({ type, id }) {
+  constructor(options) {
     const self = this;
     self.events = new PubSub();
-    self.type = type;
-    self.id = id;
+    self.type = options.type;
+    self.id = options.id;
+    self.placeholder = options.placeholder;
+    self.message = options.message;
   }
 }

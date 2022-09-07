@@ -19,7 +19,7 @@ export default class FormController {
 
     if (type === 'create-project') {
       return {
-        title: formData.get('project-name'),
+        name: formData.get('project-name'),
       };
     } if (type === 'create-task') {
       return {
@@ -30,9 +30,7 @@ export default class FormController {
       };
     }
 
-    return {
-      title: '',
-    };
+    return {};
   }
 
   render({ node, appendType = 'append' }) {
