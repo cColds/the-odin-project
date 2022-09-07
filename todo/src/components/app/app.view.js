@@ -16,6 +16,24 @@ export default class AppView {
       .subscribe('createModal', (modal) => self.createModal(modal));
   }
 
+  toggleSidebar(state) {
+    const self = this;
+    const { app } = self.elements;
+
+    if (state) {
+      app.classList.remove('sidebar-hide');
+    } else {
+      app.classList.add('sidebar-hide');
+    }
+  }
+
+  createModal(modal) {
+    const self = this;
+    const { app } = self.elements;
+
+    modal.render({ node: app });
+  }
+
   loadProject(project) {
     const self = this;
     const { contentBody } = self.elements;
@@ -38,24 +56,6 @@ export default class AppView {
 
     self.module.projects[prevId]?.setActive(false);
     self.module.projects[activeId].setActive(true);
-  }
-
-  toggleSidebar(state) {
-    const self = this;
-    const { app } = self.elements;
-
-    if (state) {
-      app.classList.remove('sidebar-hide');
-    } else {
-      app.classList.add('sidebar-hide');
-    }
-  }
-
-  createModal(modal) {
-    const self = this;
-    const { app } = self.elements;
-
-    modal.render({ node: app });
   }
 
   createProject({ project, type }) {
