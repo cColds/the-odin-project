@@ -4,6 +4,10 @@ export default [
     iconType: 'inbox',
     id: 'inbox',
     type: 'default',
+    options: {
+      deleted: false,
+      edited: false,
+    },
   },
   {
     name: 'Today',
@@ -11,6 +15,10 @@ export default [
     id: 'today',
     filter: (todos) => todos.filter(({ 'due-date': dueDate }) => dueDate === '00.00.00'),
     type: 'default',
+    options: {
+      deleted: false,
+      edited: false,
+    },
   },
   {
     name: 'Week',
@@ -18,6 +26,11 @@ export default [
     id: 'week',
     filter: (todos) => todos.filter(({ 'due-date': dueDate }) => dueDate === '00.00.01'),
     type: 'default',
+    options: {
+      deleted: false,
+      edited: false,
+      added: false,
+    },
   },
   {
     name: 'Month',
@@ -25,5 +38,10 @@ export default [
     id: 'month',
     filter: (todos) => todos.filter(({ 'due-date': dueDate }) => dueDate === '00.00.02'),
     type: 'default',
+    options: {
+      deleted: false,
+      edited: false,
+      added: false,
+    },
   },
 ];
