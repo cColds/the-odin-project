@@ -17,6 +17,18 @@ export default class AppController {
     return self.module.modal;
   }
 
+  toggleSidebar(state) {
+    const self = this;
+
+    self.module.toggleSidebar(state);
+  }
+
+  deleteProject(projectId) {
+    const self = this;
+
+    self.module.deleteProject(projectId);
+  }
+
   createTodo({
     id = crypto.randomUUID(),
     title,
@@ -63,20 +75,91 @@ export default class AppController {
     project.events.subscribe('click', () => self.changeProject(id));
   }
 
+  createProjectForm({ title, callback, placeholder }) {
+    const self = this;
+    const createProjectFrom = new Form({
+      type: 'create-project',
+      id: 'modal__form',
+      placeholder,
+    }).controller;
+
+    self.modal.setContent({
+      title,
+      bodyRender: createProjectFrom,
+      submit: () => {
+        const { values } = createProjectFrom;
+
+        callback(values);
+
+        return true;
+      },
+    });
+    self.modal.open();
+  }
+
+  createMessageForm({ title, callback, message }) {
+    const self = this;
+    const createProjectFrom = new Form({
+      id: 'modal__form',
+      message,
+    }).controller;
+
+    self.modal.setContent({
+      title,
+      bodyRender: createProjectFrom,
+      isCritical: true,
+      submit: () => {
+        callback();
+
+        return true;
+      },
+    });
+    self.modal.open();
+  }
+
   changeProject(projectId) {
     const self = this;
 
     self.module.changeProject(projectId);
 
-    const { todos } = self.module.projects[projectId];
+    const { projects } = self.module;
+    const { todos } = projects[projectId];
 
     todos.forEach((todo) => self.createTodo(todo));
-  }
 
-  toggleSidebar(state) {
-    const self = this;
+    const { projectTitle, projectHeaderBtn: { addBtn, editBtn, deleteBtn } } = self.view.elements;
 
-    self.module.toggleSidebar(state);
+    if (addBtn) {
+      addBtn.addEventListener('click', () => console.log('add todo'));
+    }
+
+    if (editBtn) {
+      editBtn.addEventListener('click', () => self.createProjectForm({
+        title: 'Edit Project',
+        callback: ({ name }) => {
+          if (name.trim().length > 3) {
+            projects[projectId].name = name;
+            projectTitle.textContent = name;
+
+            storage.save('projects', appData.getUserProjects());
+          }
+        },
+        placeholder: {
+          name: projects[projectId].data.name,
+        },
+      }));
+    }
+
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', () => self.createMessageForm({
+        title: 'Delete Project',
+        callback: () => {
+          self.changeProject('inbox');
+          self.deleteProject(projectId);
+        },
+        message: `Do you really want to delete the project <strong>${projects[projectId].data.name}</strong>`,
+      }));
+    }
   }
 
   render({ node, appendType = 'append' }) {
@@ -93,26 +176,16 @@ export default class AppController {
     self.changeProject('inbox');
 
     sidebarToggle.addEventListener('click', () => self.toggleSidebar(!self.module.sidebarState));
-    createProjectBtn.addEventListener('click', () => {
-      const createProjectFrom = new Form({ type: 'create-project', id: 'modal__form' }).controller;
+    createProjectBtn.addEventListener('click', () => self.createProjectForm({
+      title: 'Create Project',
+      callback: ({ name }) => {
+        if (name.trim().length > 3) {
+          self.createProject({ name });
 
-      self.modal.setContent({
-        title: 'Create Project',
-        bodyRender: createProjectFrom,
-        submit: () => {
-          const { values: { title } } = createProjectFrom;
-
-          if (title.trim().length > 3) {
-            self.createProject({ name: title });
-
-            storage.save('projects', appData.getUserProjects());
-          }
-
-          return true;
-        },
-      });
-      self.modal.open();
-    });
+          storage.save('projects', appData.getUserProjects());
+        }
+      },
+    }));
 
     storage.load('projects').then((userProjects) => userProjects.forEach((project) => self.createProject(project)));
     storage.load('todos').then((todos) => {

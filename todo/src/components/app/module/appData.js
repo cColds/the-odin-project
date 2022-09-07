@@ -15,6 +15,10 @@ export default {
     }
   },
 
+  removeProject(projectId) {
+    delete this.projectList[projectId];
+  },
+
   addTodo(todo) {
     const { id } = todo.data;
 

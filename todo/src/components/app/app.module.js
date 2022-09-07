@@ -3,6 +3,7 @@ import Project from '../project/project';
 import Todo from '../todo/todo';
 import Modal from '../modal/modal';
 import appData from './module/appData';
+import storage from '../../modules/storage';
 
 export default class AppModule {
   constructor() {
@@ -36,6 +37,17 @@ export default class AppModule {
     self.modal = new Modal().controller;
 
     self.events.publish('createModal', self.modal);
+  }
+
+  deleteProject(projectId) {
+    const self = this;
+
+    delete self.projects[projectId];
+    appData.removeProject(projectId);
+
+    storage.save('projects', appData.getUserProjects());
+
+    self.events.publish('deleteProject', projectId);
   }
 
   createTodo(todo) {

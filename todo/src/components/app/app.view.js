@@ -3,9 +3,6 @@ export default class AppView {
     const self = this;
     self.module = module;
     self.elements = {};
-    self.components = {
-      projects: {},
-    };
 
     self.module.events
       .subscribe('render', ({ node, appendType }) => self.render({ node, appendType }))
@@ -13,7 +10,8 @@ export default class AppView {
       .subscribe('createProject', ({ project, type }) => self.createProject({ project, type }))
       .subscribe('changeProject', ({ prevId, activeId }) => self.changeProject({ prevId, activeId }))
       .subscribe('createTodo', (todo) => self.createTodo(todo))
-      .subscribe('createModal', (modal) => self.createModal(modal));
+      .subscribe('createModal', (modal) => self.createModal(modal))
+      .subscribe('deleteProject', (projectId) => self.removeProject(projectId));
   }
 
   toggleSidebar(state) {
@@ -81,10 +79,11 @@ export default class AppView {
       <ul class="todo__list"></ul>
     `;
 
+    self.elements.projectTitle = self.elements.contentBody.querySelector('.project__title');
     self.elements.projectHeaderBtn = {
-      add: self.elements.contentBody.querySelector('#add-todo-btn'),
-      edit: self.elements.contentBody.querySelector('#edit-project-btn'),
-      delete: self.elements.contentBody.querySelector('#delete-project-btn'),
+      addBtn: self.elements.contentBody.querySelector('#add-todo-btn'),
+      editBtn: self.elements.contentBody.querySelector('#edit-project-btn'),
+      deleteBtn: self.elements.contentBody.querySelector('#delete-project-btn'),
     };
     self.elements.todoList = self.elements.contentBody.querySelector('.todo__list');
   }
@@ -98,6 +97,13 @@ export default class AppView {
     self.loadProject(self.module.projects[activeId]);
   }
 
+  removeProject(projectId) {
+    const self = this;
+    const { projects } = self.elements;
+
+    projects[projectId].remove();
+  }
+
   createProject({ project, type }) {
     const self = this;
     const { projectList } = self.elements;
@@ -108,6 +114,13 @@ export default class AppView {
     project.render({ node: listItem });
 
     projectList?.[type].append(listItem);
+
+    if (type === 'user') {
+      if (!self.elements.projects) {
+        self.elements.projects = {};
+      }
+      self.elements.projects[project.data.id] = listItem;
+    }
   }
 
   render({ node, appendType }) {
