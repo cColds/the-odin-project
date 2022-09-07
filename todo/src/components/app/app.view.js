@@ -19,11 +19,16 @@ export default class AppView {
   loadProject(project) {
     const self = this;
     const { contentBody } = self.elements;
-    const todos = project.controller.getTodos();
+    const todos = project.getTodos();
 
     contentBody.style.whiteSpace = 'pre-line';
-    contentBody.innerHTML = `
-      ${project.controller.name}\n\n
+    contentBody.innerHTML = `${project.name}\n
+      --------------------------------------------------------------------------
+      deleted: ${project.options.deleted}\n
+      edited: ${project.options.edited}\n
+      added: ${project.options.added}
+      --------------------------------------------------------------------------
+
       ${todos.map((todo) => `${todo.title} - ${todo.description}`).join('\n')}
     `;
   }
@@ -31,8 +36,8 @@ export default class AppView {
   changeProject({ prevId, activeId }) {
     const self = this;
 
-    self.module.projects[prevId]?.controller.setActive(false);
-    self.module.projects[activeId].controller.setActive(true);
+    self.module.projects[prevId]?.setActive(false);
+    self.module.projects[activeId].setActive(true);
   }
 
   toggleSidebar(state) {
@@ -60,7 +65,7 @@ export default class AppView {
 
     listItem.classList.add('project-list__item');
 
-    project.controller.render({ node: listItem });
+    project.render({ node: listItem });
 
     projectList?.[type].append(listItem);
   }
