@@ -2,51 +2,76 @@ import vdate from '../../../modules/vdate';
 
 export default [
   {
-    name: 'Inbox',
-    iconType: 'inbox',
     id: 'inbox',
+    title: 'Inbox',
+    iconType: 'inbox',
     type: 'default',
     options: {
       deleted: false,
       edited: false,
     },
+    isActive: true,
   },
   {
-    name: 'Today',
-    iconType: 'today',
     id: 'today',
-    filter: (todos) => todos.filter(({ dueDate }) => vdate.isToday(new Date(dueDate))),
+    title: 'Today',
+    iconType: 'today',
+    filter: ({ dueDate }) => vdate.isToday(new Date(dueDate)),
     type: 'default',
     options: {
       deleted: false,
       edited: false,
-      todoParent: true,
+      parent: true,
     },
   },
   {
-    name: 'Week',
-    iconType: 'date_range',
     id: 'week',
-    filter: (todos) => todos.filter(({ dueDate }) => vdate.isWeek(new Date(dueDate))),
+    title: 'Week',
+    iconType: 'date_range',
+    filter: ({ dueDate }) => {
+      const isToday = vdate.isToday(new Date(dueDate));
+      const isWeek = vdate.isWeek(new Date(dueDate));
+
+      return !isToday && isWeek;
+    },
     type: 'default',
     options: {
       deleted: false,
       edited: false,
       added: false,
-      todoParent: true,
+      parent: true,
     },
   },
   {
-    name: 'Month',
-    iconType: 'calendar_month',
     id: 'month',
-    filter: (todos) => todos.filter(({ dueDate }) => vdate.isMonth(new Date(dueDate))),
+    title: 'Month',
+    iconType: 'calendar_month',
+    filter: ({ dueDate }) => {
+      const isToday = vdate.isToday(new Date(dueDate));
+      const isWeek = vdate.isWeek(new Date(dueDate));
+      const isMonth = vdate.isMonth(new Date(dueDate));
+
+      return !isToday && !isWeek && isMonth;
+    },
     type: 'default',
     options: {
       deleted: false,
       edited: false,
       added: false,
-      todoParent: true,
+      parent: true,
+    },
+  },
+  {
+    id: 'expired',
+    title: 'Expired',
+    iconType: 'calendar_month',
+    filter: ({ isExpired }) => isExpired,
+    type: 'default',
+    options: {
+      deleted: false,
+      edited: false,
+      added: false,
+      parent: true,
     },
   },
 ];
