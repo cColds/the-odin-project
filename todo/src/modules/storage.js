@@ -6,7 +6,7 @@ export default {
   },
 
   async load(key) {
-    const data = await localStorage.getItem(`${LOCAL_KEY}-${key}`);
+    const data = localStorage.getItem(`${LOCAL_KEY}-${key}`);
     const res = await JSON.parse(data);
 
     return res || [];
