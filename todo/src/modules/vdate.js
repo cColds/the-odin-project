@@ -10,11 +10,8 @@ export default {
   },
 
   isToday(date) {
-    const today = new Date();
-    const copyDate = new Date(date.getTime());
-
-    this.dropTime(today);
-    this.dropTime(copyDate);
+    const today = this.dropTime(new Date());
+    const copyDate = this.dropTime(new Date(date.getTime()));
 
     return today.getTime() === copyDate.getTime();
   },
@@ -23,23 +20,28 @@ export default {
     const monday = this.getMonday();
     const sunday = this.getSunday();
 
-    return date.getTime() >= monday.getTime() && date.getTime() <= sunday.getTime();
+    sunday.setDate(sunday.getDate() + 1);
+
+    return date.getTime() >= monday.getTime() && date.getTime() < sunday.getTime();
   },
 
   isMonth(date) {
     const firstMonthDay = this.firstMonthDay();
     const lastMonthDay = this.lastMonthDay();
 
-    return date.getTime() >= firstMonthDay.getTime() && date.getTime() <= lastMonthDay.getTime();
+    lastMonthDay.setDate(lastMonthDay.getDate() + 1);
+
+    return date.getTime() >= firstMonthDay.getTime() && date.getTime() < lastMonthDay.getTime();
   },
 
   dropTime(date) {
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
+    const coypDate = new Date(date.getTime());
+    coypDate.setHours(0);
+    coypDate.setMinutes(0);
+    coypDate.setSeconds(0);
+    coypDate.setMilliseconds(0);
 
-    return date;
+    return coypDate;
   },
 
   getMonday(date = new Date()) {
@@ -52,12 +54,11 @@ export default {
   },
 
   getSunday(date = new Date()) {
-    const copyDate = new Date(date.getTime());
-    const weekDay = date.getDay();
-    const day = date.getDate();
-    const diff = day + weekDay - (!day ? 6 : -1);
+    const monday = this.getMonday(date);
 
-    return this.dropTime(new Date(copyDate.setDate(diff)));
+    monday.setDate(monday.getDate() + 6);
+
+    return this.dropTime(monday);
   },
 
   firstMonthDay(date = new Date()) {
@@ -70,7 +71,7 @@ export default {
 
   dateToText(date) {
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
 
     return `${day}.${month}.${year}`;
