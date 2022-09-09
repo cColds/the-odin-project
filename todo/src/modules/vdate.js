@@ -2,6 +2,13 @@ const WEEK_LEN = 7;
 const CALENDAR_SIZE = 42;
 
 export default {
+  isExpired(date) {
+    const today = this.dropTime(new Date()).getTime();
+    const copyDate = this.dropTime(new Date(date.getTime())).getTime();
+
+    return copyDate < today;
+  },
+
   isToday(date) {
     const today = new Date();
     const copyDate = new Date(date.getTime());
