@@ -2,6 +2,15 @@
 @import "../../../styles/mixins";
 @import "../../../styles/material-symbols";
 
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: $color-gray-mx;
+  border-radius: 5px;
+}
+
 .app {
   $sidebar-width: 320px;
 
@@ -18,7 +27,7 @@
       color: $color-gray-m;
       position: absolute;
       top: 30px;
-      right: 30px;
+      right: -60px;
 
       &:hover {
         background-color: $color-gray-mx;
@@ -33,10 +42,9 @@
 
     & .sidebar__content {
       background-color: $color-dark-s;
-      display: flex;
-      flex-direction: column;
       width: $sidebar-width;
-      min-height: 100vh;
+      height: 100vh;
+      overflow-y: auto;
 
       & .sidebar__header {
         display: flex;
@@ -62,7 +70,7 @@
         flex-grow: 1;
         padding: 30px 0;
 
-        & .project-list {
+        & .tab__list {
           padding: 0 15px;
         }
 
@@ -110,36 +118,8 @@
     & .content-wrapper {
       width: 100%;
       max-width: 800px;
-      padding: 60px 0;
+      padding: 30px 30px 60px;
       margin: 0 auto;
-    }
-
-    & .project__header {
-      border-bottom: 1px solid $color-gray-mx;
-      display: flex;
-      align-items: center;
-      height: 80px;
-      padding: 0 30px;
-
-      & .project__icon {
-        color: $color-white;
-        font-size: 28px;
-      }
-
-      & .project__title {
-        @include text-overflow;
-        color: $color-white;
-        font-size: 24px;
-        margin-left: 15px;
-        margin-right: 30px;
-      }
-
-      & .project__controls {
-        display: flex;
-        align-items: center;
-        margin-left: auto;
-        gap: 15px;
-      }
     }
 
     & .todo__list {
@@ -157,10 +137,6 @@
 
   &.sidebar-hide .app__sidebar {
     margin-left: -$sidebar-width;
-
-    & .sidebar__toggle {
-      right: -60px;
-    }
   }
 
   &.sidebar-hide .app__content {
@@ -293,5 +269,28 @@
   &:disabled,
   &.btn_disabled {
     pointer-events: none;
+  }
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.highlight {
+  animation: highlight 1s .5s forwards;
+}
+
+@keyframes highlight {
+  0% {
+    box-shadow: 0px 0px 0px $color-gray;
+  }
+
+  50% {
+    box-shadow: 0px 0px 30px $color-gray;
+  }
+
+  100% {
+    box-shadow: 0px 0px 0px $color-gray;
   }
 }

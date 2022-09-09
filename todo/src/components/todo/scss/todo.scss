@@ -16,7 +16,24 @@
     border-color: $color-dark-l;
 
     &:hover {
-      background-color: $color-dark-s;
+      background-color: $color-dark;
+    }
+  }
+
+  &.todo_expired {
+    background-color: $color-dark;
+    border-color: $color-critical-l;
+
+    & .todo__checkbox {
+      pointer-events: none;
+    }
+
+    & .todo-edit-btn {
+      display: none;
+    }
+
+    &:hover {
+      background-color: $color-dark;
     }
   }
 
@@ -86,5 +103,13 @@
     gap: 5px;
     margin-top: 15px;
     margin-left: auto;
+
+    &:hover {
+      color: $color-white-m;
+    }
+
+    &:active {
+      color: $color-white;
+    }
   }
 }

@@ -1,91 +1,66 @@
 import PubSub from '../../libs/pubSub';
-import Project from '../project/project';
-import Todo from '../todo/todo';
-import Modal from '../modal/modal';
-import appData from './module/appData';
-import storage from '../../modules/storage';
+import appData from './modules/app.data';
 
 export default class AppModule {
   constructor() {
     const self = this;
     self.events = new PubSub();
-    self.sidebarState = true;
-    self.activeProjectId = null;
-    self.projects = {};
-    self.todos = {};
-    self.modal = null;
-  }
-
-  updateProjects() {
-    const self = this;
-    const { projects } = self;
-
-    Object.keys(projects).forEach((key) => projects[key].update());
+    self.data = appData;
   }
 
   toggleSidebar(state) {
     const self = this;
 
-    self.sidebarState = state;
+    self.data.setSidebarState(state);
 
-    self.events.publish('toggleSidebar', self.sidebarState);
+    self.events.publish('toggleSidebar', state);
   }
 
-  createModal() {
+  deleteTodo(id) {
     const self = this;
 
-    self.modal = new Modal().controller;
+    self.data.removeTodo(id);
 
-    self.events.publish('createModal', self.modal);
+    self.events.publish('deleteTodo', id);
   }
 
-  deleteProject(projectId) {
+  loadTodo(todo) {
     const self = this;
 
-    delete self.projects[projectId];
-    appData.removeProject(projectId);
-
-    storage.save('projects', appData.getUserProjects());
-
-    self.events.publish('deleteProject', projectId);
+    self.data.addTodo(todo);
   }
 
-  createTodo(todo) {
+  updateTabs() {
     const self = this;
-    const newTodo = new Todo(todo).controller;
 
-    self.todos[todo.id] = newTodo;
-
-    appData.addTodo(newTodo);
-
-    self.updateProjects();
-
-    self.events.publish('createTodo', newTodo);
-
-    return newTodo;
+    self.events.publish('updateTabs');
   }
 
-  changeProject(projectId) {
+  changeTab(projectId) {
     const self = this;
-    const prevProjectId = self.activeProjectId;
+    const prevId = self.data.getActiveProjectId();
 
-    self.activeProjectId = projectId;
+    self.data.setActiveProjectId(projectId);
 
-    appData.setActiveProjectId(self.activeProjectId);
-
-    self.events.publish('changeProject', { prevId: prevProjectId, activeId: self.activeProjectId });
+    self.events.publish('changeTab', {
+      prevId,
+      currentId: projectId,
+    });
   }
 
-  createProject(project) {
+  createTab(project) {
     const self = this;
-    const newProject = new Project(project).controller;
 
-    self.projects[project.id] = newProject;
+    self.data.addProject(project);
 
-    appData.addProject(newProject);
+    self.events.publish('createTab', project);
+  }
 
-    self.events.publish('createProject', { project: newProject, type: project.type });
+  removeProject(projectId) {
+    const self = this;
 
-    return newProject;
+    self.data.removeProject(projectId);
+
+    self.events.publish('removeProject', projectId);
   }
 }

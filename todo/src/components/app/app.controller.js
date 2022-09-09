@@ -1,8 +1,53 @@
-import Form from '../forms/form';
+import Project from '../../modules/project';
+import Todo from '../../modules/todo';
+
 import defautlProjects from './data/defautlProjects';
-import defaultTodo from './data/defaultTodo.json';
-import appData from './module/appData';
+import getTestTodos from './data/testTodos';
+import appData from './modules/app.data';
 import storage from '../../modules/storage';
+
+const WORDS = [
+  'Luctus', 'Vel', 'Augue', 'Maecenas', 'Aptent', 'Sollicitudin', 'Amet',
+  'Amet', 'Integer', 'Sapien', 'Curabitur', 'Proin', 'Dapibus', 'Eros',
+  'Vestibulum', 'Tempus', 'Curae', 'Etiam', 'Curae', 'Etiam', 'Sit', 'Egestas',
+  'Vehicula', 'Lorem', 'Porttitor', 'Nostra', 'Ornare', 'Conubia', 'Rutrum', 'Erat',
+  'Potenti', 'Accumsan', 'Torquent', 'Sit', 'Vivamus', 'Pharetra', 'Placerat', 'Vel',
+  'Non', 'Suscipit', 'Fusce', 'Quisque', 'Fusce', 'Odio', 'Tempus', 'Integer', 'Fringilla',
+  'Massa', 'Quisque', 'Consectetur', 'Magna', 'A', 'Sapien', 'Fusce', 'Cursus', 'Dui', 'Odio',
+  'Malesuada', 'Taciti', 'Placerat', 'Felis', 'Tempor', 'Quis', 'Per', 'Egestas', 'Semper',
+  'Convallis', 'Molestie', 'Enim', 'Eros', 'Inceptos', 'Dictum', 'Venenatis', 'Hendrerit', 'Risus',
+  'Est', 'Porttitor', 'Nullam', 'Commodo', 'Feugiat', 'Etiam', 'Porta', 'Vulputate', 'Blandit',
+  'Molestie', 'Hendrerit', 'Feugiat', 'Eu', 'Sodales', 'Eleifend', 'Inceptos', 'Cubilia', 'Luctus',
+  'Nunc', 'Amet', 'Mattis', 'Lacinia', 'Quisque', 'Erat', 'Erat', 'Porta', 'Ultricies', 'Faucibus',
+  'Pretium', 'Enim', 'Tortor', 'Libero', 'Condimentum', 'Rutrum', 'Vulputate', 'Aliquam',
+  'Ullamcorper', 'Dictumst', 'Lobortis', 'Lobortis', 'Nullam', 'Aliquet', 'Nunc', 'Convallis',
+  'Massa', 'In', 'Vehicula', 'Nam', 'Volutpat', 'Sapien', 'Aenean', 'Nisi', 'Tempus', 'Sit',
+  'Integer', 'Diam', 'Pharetra', 'Mattis', 'Per', 'Fermentum', 'Fusce', 'Laoreet', 'Quisque',
+  'Eget', 'Id', 'Vel', 'Lectus', 'Nisl', 'Tempus', 'Tellus', 'In', 'Conubia', 'Inceptos', 'Erat',
+  'Senectus', 'Bibendum', 'Duis', 'Maecenas', 'Eu', 'Gravida', 'Porttitor', 'Nulla', 'Pellentesque',
+  'Malesuada', 'Lobortis', 'Sollicitudin', 'Sapien', 'Etiam', 'Tincidunt', 'Mi', 'Sodales',
+  'Bibendum', 'Taciti', 'Morbi', 'Lorem', 'Elementum', 'Vitae', 'Sociosqu', 'Suscipit', 'Consequat',
+  'Sem', 'Felis', 'Etiam', 'Adipiscing', 'Tempor', 'Tristique', 'Vivamus', 'Quisque', 'Libero',
+  'Sit', 'Consectetur', 'Potenti', 'Primis', 'Netus', 'Ultrices', 'Blandit', 'Ut', 'Nisi', 'Ornare',
+  'Id', 'Nostra', 'Sodales', 'Lacinia', 'Egestas', 'Rutrum', 'Libero', 'Proin', 'Sodales',
+  'Habitant', 'Cras', 'Tristique', 'Auctor', 'Eget', 'Ipsum', 'Tortor', 'Mauris', 'Faucibus',
+  'Auctor', 'Massa', 'Vulputate', 'Tincidunt', 'Placerat', 'In', 'Quisque', 'Aenean', 'Cubilia',
+  'Bibendum', 'Lobortis', 'Sagittis', 'Nibh', 'Auctor', 'Conubia', 'Enim', 'Platea', 'Tristique',
+  'Fusce', 'Arcu', 'Ante', 'Ultrices', 'Quisque', 'Nostra', 'Sociosqu', 'Erat', 'Enim', 'Molestie',
+  'Arcu', 'Nullam', 'Taciti', 'Massa', 'Tortor', 'Ultricies', 'Amet', 'Himenaeos', 'Accumsan',
+  'Senectus', 'Imperdiet', 'Donec', 'Auctor', 'Libero', 'Varius', 'Quisque', 'Cras', 'Senectus',
+  'Amet', 'Tempus', 'Class', 'Luctus', 'Sollicitudin', 'Amet', 'Aenean', 'Etiam', 'Curabitur',
+  'Condimentum', 'Fames', 'Vitae', 'Taciti', 'Dictumst', 'Convallis', 'Vehicula', 'Libero',
+  'Consequat', 'Interdum', 'Malesuada', 'Eu', 'Sit', 'Etiam', 'Integer', 'Ad', 'Senectus', 'Dui',
+  'A', 'Sit', 'Sed', 'Amet', 'Ante', 'Donec', 'Aenean', 'Luctus', 'Sed', 'Interdum', 'Commodo',
+  'Molestie', 'Vivamus', 'Per', 'Facilisis', 'Viverra', 'Lobortis', 'Curabitur', 'Nisl', 'Lectus',
+  'Leo', 'Nec', 'Elit', 'Suspendisse', 'Odio', 'Praesent', 'Ante', 'Aenean', 'Aliquet', 'Porttitor',
+  'Nulla', 'Conubia', 'Egestas', 'Euismod', 'Tempus', 'Lorem', 'Vivamus', 'Tortor', 'Torquent',
+  'Mauris', 'Ultrices', 'Auctor', 'Erat', 'Nisl', 'Libero', 'Varius', 'Augue', 'Mauris',
+  'Habitasse', 'Convallis', 'Non', 'Sapien', 'Curabitur', 'Lobortis', 'Etiam', 'Inceptos', 'In',
+  'Nec', 'Turpis', 'Aptent', 'Dictumst', 'Est', 'Vehicula', 'Nec', 'Lacinia', 'Rhoncus', 'Proin',
+  'Varius', 'Duis', 'Blandit', 'Vestibulum', 'Scelerisque', 'Egestas', 'Mi', 'Tellus', 'Quisque',
+];
 
 export default class AppController {
   constructor(module, view) {
@@ -11,10 +56,16 @@ export default class AppController {
     self.view = view;
   }
 
-  get modal() {
+  get events() {
     const self = this;
 
-    return self.module.modal;
+    return self.module.events;
+  }
+
+  get data() {
+    const self = this;
+
+    return self.module.data;
   }
 
   toggleSidebar(state) {
@@ -23,177 +74,291 @@ export default class AppController {
     self.module.toggleSidebar(state);
   }
 
-  deleteProject(projectId) {
+  goToTodo(id) {
     const self = this;
 
-    self.module.deleteProject(projectId);
+    self.events.publish('goToTodo', id);
   }
 
-  createTodo({
-    id = crypto.randomUUID(),
-    title,
-    description,
-    dueDate = null,
-    priority = 0,
-    projectId,
-    isCompleted = false,
-    isExpired = false,
-  }) {
+  deletTodo(id) {
     const self = this;
-    const todo = self.module.createTodo({
-      id, title, description, dueDate, priority, projectId, isCompleted, isExpired,
-    });
 
-    todo.events.subscribe('update', () => storage.save('todos', appData.getTodos()));
+    self.module.deleteTodo(id);
+    self.updateTabs();
+
+    storage.save('todos', appData.getTodos());
   }
 
-  createProject({
-    id = crypto.randomUUID(),
-    name,
-    iconType = 'list_alt',
-    filter = null,
-    type = 'user',
-    options: {
-      deleted = true,
-      edited = true,
-      added = true,
-      todoParent = false,
-    } = {},
-  }) {
+  createTodo(todo, projectId) {
     const self = this;
-    const project = self.module.createProject({
-      id,
-      name,
-      iconType,
-      filter,
-      type,
-      options: {
-        deleted, edited, added, todoParent,
-      },
-    });
+    const activeProjectId = self.data.getActiveProjectId();
 
-    project.events.subscribe('click', () => self.changeProject(id));
+    if (activeProjectId === projectId) {
+      self.events.publish('createTodo', todo);
+
+      const { todos: components } = self.view.components;
+
+      // Events
+      components[todo.id].events.subscribe('update', () => {
+        storage.save('todos', appData.getTodos());
+        self.updateTabs();
+      });
+
+      components[todo.id].events.subscribe('deleteTodo', (id) => self.deletTodo(id));
+      components[todo.id].events.subscribe('goToParent', ({ id, projectId: parentId }) => {
+        const currentProjectId = self.data.getActiveProjectId();
+
+        if (currentProjectId !== parentId) {
+          self.changeTab(parentId);
+        }
+        self.goToTodo(id);
+      });
+    }
   }
 
-  createProjectForm({ title, callback, placeholder }) {
+  createTodos(projectId) {
     const self = this;
-    const createProjectFrom = new Form({
-      type: 'create-project',
-      id: 'modal__form',
-      placeholder,
-    }).controller;
+    const project = appData.getProject(projectId);
+    const todos = appData.getTodos(project.filter);
 
-    self.modal.setContent({
-      title,
-      bodyRender: createProjectFrom,
-      submit: () => {
-        const { values } = createProjectFrom;
+    self.events.publish('removeTodos');
 
-        callback(values);
-
-        return true;
-      },
-    });
-    self.modal.open();
+    todos.forEach((todo) => self.createTodo(todo, projectId));
   }
 
-  createMessageForm({ title, callback, message }) {
+  loadTodo(todoData) {
     const self = this;
-    const createProjectFrom = new Form({
-      id: 'modal__form',
-      message,
-    }).controller;
+    const todo = new Todo(todoData);
 
-    self.modal.setContent({
-      title,
-      bodyRender: createProjectFrom,
-      isCritical: true,
-      submit: () => {
-        callback();
+    self.module.loadTodo(todo);
 
-        return true;
-      },
-    });
-    self.modal.open();
+    return todo;
   }
 
-  changeProject(projectId) {
+  updateTabs() {
     const self = this;
 
-    self.module.changeProject(projectId);
+    self.module.updateTabs();
+  }
 
-    const { projects } = self.module;
-    const { todos } = projects[projectId];
+  changeTab(projectId) {
+    const self = this;
+    const { heading } = self.view.components;
 
-    todos.forEach((todo) => self.createTodo(todo));
+    heading.setData(appData.getProject(projectId));
 
-    const { projectTitle, projectHeaderBtn: { addBtn, editBtn, deleteBtn } } = self.view.elements;
+    self.module.changeTab(projectId);
 
-    if (addBtn) {
-      addBtn.addEventListener('click', () => console.log('add todo'));
+    self.createTodos(projectId);
+  }
+
+  createTab(projectData) {
+    const self = this;
+    const project = new Project(projectData);
+
+    self.module.createTab(project);
+
+    const { tabs } = self.view.components;
+
+    // Events
+    tabs[project.id].events.subscribe('tabClick', () => self.changeTab(project.id));
+
+    if (projectData.isActive) {
+      self.data.setActiveProjectId(project.id);
+      self.changeTab(project.id);
     }
 
-    if (editBtn) {
-      editBtn.addEventListener('click', () => self.createProjectForm({
-        title: 'Edit Project',
-        callback: ({ name }) => {
-          if (name.trim().length > 3) {
-            projects[projectId].name = name;
-            projectTitle.textContent = name;
+    return project;
+  }
 
-            storage.save('projects', appData.getUserProjects());
-          }
-        },
-        placeholder: {
-          name: projects[projectId].data.name,
-        },
-      }));
-    }
+  removeProject(projectId) {
+    const self = this;
 
-    if (deleteBtn) {
-      deleteBtn.addEventListener('click', () => self.createMessageForm({
-        title: 'Delete Project',
-        callback: () => {
-          self.changeProject('inbox');
-          self.deleteProject(projectId);
-        },
-        message: `Do you really want to delete the project <strong>${projects[projectId].data.name}</strong>`,
-      }));
-    }
+    self.module.removeProject(projectId);
   }
 
   render({ node, appendType = 'append' }) {
     const self = this;
     self.module.events.publish('render', { node, appendType });
 
-    const { sidebarState } = self.module;
-    const { sidebarToggle, createProjectBtn } = self.view.elements;
+    // Elements
+    const {
+      app,
+      sidebarToggle,
+      tabCreateBtn,
+    } = self.view.elements;
+    const { heading } = self.view.components;
 
-    self.module.createModal();
-    self.toggleSidebar(sidebarState);
+    // Sidebar
+    const { data } = self.module;
 
-    defautlProjects.forEach((project) => self.createProject(project));
-    self.changeProject('inbox');
+    self.toggleSidebar(data.getSidebarState());
 
-    sidebarToggle.addEventListener('click', () => self.toggleSidebar(!self.module.sidebarState));
-    createProjectBtn.addEventListener('click', () => self.createProjectForm({
-      title: 'Create Project',
+    // Modal
+    data.getModal().render({
+      node: app,
+    });
+
+    // Load Default Projects
+    defautlProjects.forEach((projectData) => {
+      self.createTab(projectData);
+    });
+
+    // Load Local Storage
+    storage.load('projects').then((projects) => {
+      projects.forEach((projectData) => self.createTab(projectData));
+    });
+
+    storage.load('todos').then((res) => {
+      const todos = res.length === 0 ? getTestTodos() : res;
+
+      todos.forEach((todoData) => self.loadTodo(todoData));
+
+      self.updateTabs();
+      self.createTodos(appData.getActiveProjectId());
+
+      if (res.length === 0) {
+        storage.save('todos', appData.getTodos());
+      }
+    });
+
+    // Listeners
+    sidebarToggle.addEventListener('click', () => self.toggleSidebar(!data.getSidebarState()));
+    tabCreateBtn.addEventListener('click', () => {
+      const projectData = {
+        title: WORDS[Math.floor(Math.random() * WORDS.length)],
+        type: 'user',
+      };
+
+      const project = self.createTab(projectData);
+      self.changeTab(project.id);
+
+      storage.save('projects', appData.getUserProjects());
+    });
+
+    window.addEventListener('animationend', ({ animationName, target }) => {
+      target.classList.remove(animationName);
+    });
+
+    // Events
+    heading.events.subscribe('createTodo', (todoData) => {
+      const todo = self.loadTodo(Object.assign(todoData));
+      self.updateTabs();
+      self.createTodo(todo, todoData.projectId);
+
+      storage.save('todos', appData.getTodos());
+    });
+    heading.events.subscribe('editData', () => {
+      self.updateTabs();
+      storage.save('projects', appData.getUserProjects());
+    });
+    heading.events.subscribe('removeProject', (id) => {
+      self.removeProject(id);
+      self.updateTabs();
+
+      if (id !== 'inbox') {
+        self.changeTab('inbox');
+      }
+
+      storage.save('projects', appData.getUserProjects());
+      storage.save('todos', appData.getTodos());
+    });
+  }
+}
+
+/*
+
+function deleteProject(projectId) {
+  const self = this;
+
+  self.module.deleteProject(projectId);
+}
+
+function createProjectForm({ title, callback, placeholder }) {
+  const self = this;
+  const createProjectFrom = new Form({
+    type: 'create-project',
+    id: 'modal__form',
+    placeholder,
+  }).controller;
+
+  self.modal.setContent({
+    title,
+    bodyRender: createProjectFrom,
+    submit: () => {
+      const { values } = createProjectFrom;
+
+      callback(values);
+
+      return true;
+    },
+  });
+  self.modal.open();
+}
+
+function createMessageForm({ title, callback, message }) {
+  const self = this;
+  const createProjectFrom = new Form({
+    id: 'modal__form',
+    message,
+  }).controller;
+
+  self.modal.setContent({
+    title,
+    bodyRender: createProjectFrom,
+    isCritical: true,
+    submit: () => {
+      callback();
+
+      return true;
+    },
+  });
+  self.modal.open();
+}
+
+function changeProject(projectId) {
+  const self = this;
+
+  self.module.changeProject(projectId);
+
+  const { projects } = self.module;
+  const { todos } = projects[projectId];
+
+  todos.forEach((todo) => self.createTodo(todo));
+
+  const { projectTitle, projectHeaderBtn: { addBtn, editBtn, deleteBtn } } = self.view.elements;
+
+  if (addBtn) {
+    addBtn.addEventListener('click', () => console.log('add todo'));
+  }
+
+  if (editBtn) {
+    editBtn.addEventListener('click', () => self.createProjectForm({
+      title: 'Edit Project',
       callback: ({ name }) => {
         if (name.trim().length > 3) {
-          self.createProject({ name });
+          projects[projectId].name = name;
+          projectTitle.textContent = name;
 
           storage.save('projects', appData.getUserProjects());
         }
       },
+      placeholder: {
+        name: projects[projectId].data.name,
+      },
     }));
+  }
 
-    storage.load('projects').then((userProjects) => userProjects.forEach((project) => self.createProject(project)));
-    storage.load('todos').then((todos) => {
-      if (todos.length === 0) {
-        defaultTodo.todos.forEach((todo) => self.createTodo(todo));
-      } else {
-        todos.forEach((todo) => self.createTodo(todo));
-      }
-    });
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', () => self.createMessageForm({
+      title: 'Delete Project',
+      callback: () => {
+        self.deleteProject(projectId);
+      },
+      message: `
+        Do you really want to delete the project <strong>${projects[projectId].data.name}</strong>
+      `,
+    }));
   }
 }
+*/

@@ -5,9 +5,9 @@ import TodoView from './todo.view';
 import TodoController from './todo.controller';
 
 export default class Todo {
-  constructor(todo) {
+  constructor(data) {
     const self = this;
-    const module = new TodoModule(todo);
+    const module = new TodoModule(data);
     const view = new TodoView(module);
     const controller = new TodoController(module, view);
 

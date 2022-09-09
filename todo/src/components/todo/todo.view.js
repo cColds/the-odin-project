@@ -1,5 +1,5 @@
 import vdate from '../../modules/vdate';
-import appData from '../app/module/appData';
+import appData from '../app/modules/app.data';
 
 export default class TodoView {
   constructor(module) {
@@ -9,12 +9,13 @@ export default class TodoView {
 
     self.module.events
       .subscribe('render', ({ node, appendType }) => self.render({ node, appendType }))
-      .subscribe('update', () => self.update());
+      .subscribe('update', () => self.update())
+      .subscribe('editTodo', () => self.update());
   }
 
   get priorityClass() {
     const self = this;
-    const { priority } = self.module;
+    const { priority } = self.module.data;
 
     switch (priority) {
       case 1: return 'btn btn_remember';
@@ -27,25 +28,41 @@ export default class TodoView {
   update() {
     const self = this;
     const {
-      todo,
-      checkboxBtn,
+      todo, todoCheckboxBtn, todoTitle,
+      todoDate, todoDescription, todoParentBtn,
+      todoParentBtnIcon, todoParentBtnLabel,
     } = self.elements;
     const {
-      isCompleted,
-    } = self.module;
+      title, dueDate, description, projectId, isCompleted, isExpired,
+    } = self.module.data;
+    const activeProjectId = appData.getActiveProjectId();
+    const { options: { parent } } = appData.getProject(activeProjectId);
+    const project = appData.getProject(projectId);
 
-    checkboxBtn.classList[isCompleted ? 'add' : 'remove']('btn_active');
     todo.classList[isCompleted ? 'add' : 'remove']('todo_active');
+    todo.classList[isExpired ? 'add' : 'remove']('todo_expired');
+
+    todoCheckboxBtn.className = `${self.priorityClass} todo__checkbox`;
+    todoCheckboxBtn.classList[isCompleted ? 'add' : 'remove']('btn_active');
+
+    todoTitle.textContent = title;
+    todoDate.textContent = `${isExpired ? 'Expired: ' : ''}${dueDate ? vdate.dateToText(new Date(dueDate)) : 'No Date'}`;
+
+    todoDescription.textContent = description;
+
+    todoParentBtn.ariaLabel = project.title;
+    todoParentBtn.classList[parent ? 'remove' : 'add']('hidden');
+    todoParentBtnLabel.ariaLabel = project.title;
+
+    todoParentBtnIcon.textContent = project.iconType;
   }
 
   render({ node, appendType }) {
     const self = this;
     const { todo } = self.elements;
     const {
-      title, description, dueDate, projectId, isCompleted,
-    } = self.module;
-    const activeProjectId = appData.getActiveProjectId();
-    const { options: { todoParent } } = appData.getProject(activeProjectId);
+      title, description, dueDate, projectId,
+    } = self.module.data;
     const project = appData.getProject(projectId);
 
     if (!(node instanceof HTMLElement)) {
@@ -87,26 +104,21 @@ export default class TodoView {
 
         <p class="todo__description">${description}</p>
 
-        ${todoParent ? `
-          <button class="btn btn_primary todo__parent" type="button" aria-label="${project.name} Project">
-            <span class="material-symbols-rounded">${project.iconType}</span>
-            ${project.name}
-          </button>
-        ` : ''}
+        <button class="btn btn_primary todo__parent" type="button" aria-label="${project.title} Project">
+          <span class="material-symbols-rounded parent__icon">${project.iconType}</span>
+          <span class="parent__label">${project.title}</span>
+        </button>
       </div>
     `;
 
-    self.elements.checkboxBtn = self.elements.todo.querySelector('.todo__checkbox');
-    self.elements.title = self.elements.todo.querySelector('.todo__title');
-    self.elements.date = self.elements.todo.querySelector('.todo__due-date');
-    self.elements.editBtn = self.elements.todo.querySelector('.todo-edit-btn');
-    self.elements.deleteBtn = self.elements.todo.querySelector('.todo-delete-btn');
-    self.elements.description = self.elements.todo.querySelector('.todo__description');
-    self.elements.parent = self.elements.todo.querySelector('.todo__parent');
-
-    if (isCompleted) {
-      self.elements.todo.classList.add('todo_active');
-      self.elements.checkboxBtn.classList.add('btn_active');
-    }
+    self.elements.todoCheckboxBtn = self.elements.todo.querySelector('.todo__checkbox');
+    self.elements.todoTitle = self.elements.todo.querySelector('.todo__title');
+    self.elements.todoDate = self.elements.todo.querySelector('.todo__due-date');
+    self.elements.todoEditBtn = self.elements.todo.querySelector('.todo-edit-btn');
+    self.elements.todoDeleteBtn = self.elements.todo.querySelector('.todo-delete-btn');
+    self.elements.todoDescription = self.elements.todo.querySelector('.todo__description');
+    self.elements.todoParentBtn = self.elements.todo.querySelector('.todo__parent');
+    self.elements.todoParentBtnIcon = self.elements.todo.querySelector('.parent__icon');
+    self.elements.todoParentBtnLabel = self.elements.todo.querySelector('.parent__label');
   }
 }

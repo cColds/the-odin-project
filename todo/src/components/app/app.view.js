@@ -1,132 +1,149 @@
+import Heading from '../heading/heading';
+import Tab from '../tab/tab';
+import Todo from '../todo/todo';
+
 export default class AppView {
   constructor(module) {
     const self = this;
     self.module = module;
     self.elements = {};
+    self.components = {};
 
     self.module.events
       .subscribe('render', ({ node, appendType }) => self.render({ node, appendType }))
       .subscribe('toggleSidebar', (state) => self.toggleSidebar(state))
-      .subscribe('createProject', ({ project, type }) => self.createProject({ project, type }))
-      .subscribe('changeProject', ({ prevId, activeId }) => self.changeProject({ prevId, activeId }))
+      .subscribe('updateTabs', () => self.updateTabs())
+      .subscribe('changeTab', ({ prevId, currentId }) => self.changeTab(prevId, currentId))
+      .subscribe('createTab', (project) => self.createTab(project))
       .subscribe('createTodo', (todo) => self.createTodo(todo))
-      .subscribe('createModal', (modal) => self.createModal(modal))
-      .subscribe('deleteProject', (projectId) => self.removeProject(projectId));
+      .subscribe('removeTodos', () => self.removeTodos())
+      .subscribe('deleteTodo', (id) => self.deleteTodo(id))
+      .subscribe('goToTodo', (id) => self.goToTodo(id))
+      .subscribe('removeProject', (id) => self.removeProject(id));
+  }
+
+  removeProject(id) {
+    const self = this;
+    const { tabs } = self.components;
+    const { tabListItems } = self.elements;
+
+    if (tabListItems?.[id]) {
+      tabListItems[id].remove();
+
+      delete tabListItems[id];
+      delete tabs[id];
+    }
   }
 
   toggleSidebar(state) {
     const self = this;
     const { app } = self.elements;
 
-    if (state) {
-      app.classList.remove('sidebar-hide');
-    } else {
-      app.classList.add('sidebar-hide');
+    app.classList[state ? 'remove' : 'add']('sidebar-hide');
+  }
+
+  updateTabs() {
+    const self = this;
+    const { tabs } = self.components;
+    const keys = Object.keys(tabs);
+
+    keys.forEach((key) => tabs[key].update());
+  }
+
+  changeTab(prevId, currentId) {
+    const self = this;
+    const { contentBody } = self.elements;
+    const { tabs } = self.components;
+    const prevProject = tabs[prevId];
+    const currentProject = tabs[currentId];
+
+    if (prevProject) {
+      prevProject.setActive(false);
+    }
+
+    currentProject.setActive(true);
+
+    contentBody.scrollIntoView();
+  }
+
+  createTab(project) {
+    const self = this;
+    const { tabList } = self.elements;
+    const { id, type } = project;
+    const listItem = document.createElement('li');
+
+    if (!self.components.tabs) {
+      self.components.tabs = {};
+      self.elements.tabListItems = {};
+    }
+
+    self.components.tabs[id] = new Tab(project).controller;
+    self.components.tabs[id].render({
+      node: listItem,
+    });
+    self.elements.tabListItems[id] = listItem;
+
+    listItem.classList.add('list__item');
+
+    tabList[type].append(listItem);
+  }
+
+  goToTodo(id) {
+    const self = this;
+    const { todoListItems } = self.elements;
+
+    todoListItems[id].scrollIntoView({
+      behavior: 'smooth', block: 'center', inline: 'center',
+    });
+
+    todoListItems[id].classList.add('highlight');
+  }
+
+  deleteTodo(id) {
+    const self = this;
+    const { todoListItems = {} } = self.elements;
+
+    if (todoListItems?.[id]) {
+      todoListItems[id].remove();
+      delete todoListItems[id];
     }
   }
 
-  createModal(modal) {
+  removeTodos() {
     const self = this;
-    const { app } = self.elements;
+    const { todos = {} } = self.components;
 
-    modal.render({ node: app });
+    Object.keys(todos).forEach((id) => self.deleteTodo(id));
+
+    self.components.todos = {};
+    self.elements.todoListItems = {};
   }
 
   createTodo(todo) {
     const self = this;
     const { todoList } = self.elements;
+    const { id } = todo;
     const listItem = document.createElement('li');
 
-    listItem.classList.add('list-item');
-
-    todo.render({ node: listItem });
-
-    todoList.append(listItem);
-  }
-
-  loadProject(project) {
-    const self = this;
-    const { contentBody } = self.elements;
-    const { added, deleted, edited } = project.data.options;
-
-    /* eslint-disable indent */
-    contentBody.innerHTML = `
-      <header class="project__header">
-        <span class="material-symbols-rounded project__icon">${project.data.iconType}</span>
-        <h2 class="project__title">${project.data.name}</h2>
-        <div class="project__controls">
-          ${
-            added ? `<button id="add-todo-btn" class="btn" type="button" aria-label="Add Todo">
-              <span class="material-symbols-rounded project__add-todo-btn">add</span>
-            </button>`
-            : ''
-          }
-          ${
-            deleted ? `<button id="edit-project-btn" class="btn" type="button" aria-label="Edit Project">
-              <span class="material-symbols-rounded project__edit-btn">edit</span>
-            </button>`
-            : ''
-          }
-          ${
-            edited ? `<button id="delete-project-btn" class="btn btn_critical" type="button" aria-label="Delete Project">
-              <span class="material-symbols-rounded project__delete-btn">delete</span>
-            </button>`
-            : ''
-          }
-        </div>
-      </header>
-
-      <ul class="todo__list"></ul>
-    `;
-
-    self.elements.projectTitle = self.elements.contentBody.querySelector('.project__title');
-    self.elements.projectHeaderBtn = {
-      addBtn: self.elements.contentBody.querySelector('#add-todo-btn'),
-      editBtn: self.elements.contentBody.querySelector('#edit-project-btn'),
-      deleteBtn: self.elements.contentBody.querySelector('#delete-project-btn'),
-    };
-    self.elements.todoList = self.elements.contentBody.querySelector('.todo__list');
-  }
-
-  changeProject({ prevId, activeId }) {
-    const self = this;
-
-    self.module.projects[prevId]?.setActive(false);
-    self.module.projects[activeId].setActive(true);
-
-    self.loadProject(self.module.projects[activeId]);
-  }
-
-  removeProject(projectId) {
-    const self = this;
-    const { projects } = self.elements;
-
-    projects[projectId].remove();
-  }
-
-  createProject({ project, type }) {
-    const self = this;
-    const { projectList } = self.elements;
-    const listItem = document.createElement('li');
-
-    listItem.classList.add('project-list__item');
-
-    project.render({ node: listItem });
-
-    projectList?.[type].append(listItem);
-
-    if (type === 'user') {
-      if (!self.elements.projects) {
-        self.elements.projects = {};
-      }
-      self.elements.projects[project.data.id] = listItem;
+    if (!self.components.todos) {
+      self.components.todos = {};
+      self.elements.todoListItems = {};
     }
+
+    self.components.todos[id] = new Todo(todo).controller;
+    self.components.todos[id].render({
+      node: listItem,
+    });
+    self.elements.todoListItems[id] = listItem;
+
+    listItem.classList.add('list__item');
+
+    todoList.prepend(listItem);
   }
 
   render({ node, appendType }) {
     const self = this;
     const { app } = self.elements;
-    // const { sidebarState } = self.module;
 
     if (!(node instanceof HTMLElement)) {
       throw new Error('Can\'t rendering, bad node');
@@ -154,19 +171,19 @@ export default class AppView {
           </header>
 
           <div class="sidebar__body">
-            <ul id="default-project-list" class="project-list">
+            <ul class="tab__list tab__list-default">
             </ul>
 
             <div class="body-container">
               <div class="body-container__header">
                 <h2 class="header__title">projects</h2>
 
-                <button id="create-project" class="btn" type="button" aria-label="Create Project">
+                <button class="btn tab__create-btn" type="button" aria-label="Create Project">
                   <span class="material-symbols-rounded btn-icon">add</span>
                 </button>
               </div>
 
-              <ul id="user-project-list" class="project-list">
+              <ul class="tab__list tab__list-user">
               </ul>
             </div>
           </div>
@@ -180,7 +197,9 @@ export default class AppView {
       </aside>
 
       <main class="app__content">
-        <div class="content-wrapper"></div>
+        <div class="content-wrapper">
+          <div class="todo__list"></div>
+        </div>
       </main>
     `;
 
@@ -188,10 +207,17 @@ export default class AppView {
     self.elements.sidebarToggle = self.elements.app.querySelector('.sidebar__toggle');
     self.elements.sidebarBody = self.elements.sidebar.querySelector('.sidebar__body');
     self.elements.contentBody = self.elements.app.querySelector('.app__content .content-wrapper');
-    self.elements.projectList = {
-      default: self.elements.sidebarBody.querySelector('#default-project-list'),
-      user: self.elements.sidebarBody.querySelector('#user-project-list'),
+    self.elements.tabList = {
+      default: self.elements.sidebarBody.querySelector('.tab__list-default'),
+      user: self.elements.sidebarBody.querySelector('.tab__list-user'),
     };
-    self.elements.createProjectBtn = self.elements.sidebarBody.querySelector('#create-project');
+    self.elements.tabCreateBtn = self.elements.sidebarBody.querySelector('.tab__create-btn');
+    self.elements.todoList = self.elements.app.querySelector('.todo__list');
+
+    self.components.heading = new Heading().controller;
+    self.components.heading.render({
+      node: self.elements.contentBody,
+      appendType: 'prepend',
+    });
   }
 }
