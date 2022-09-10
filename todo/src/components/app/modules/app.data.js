@@ -53,6 +53,18 @@ function AppData() {
       return projectList;
     },
 
+    getProjectsByOptions({
+      added = false,
+      edited = false,
+      deleted = false,
+    }) {
+      const projectList = this.getProjects();
+
+      return projectList.filter(({ options }) => options.added === added
+      && options.edited === edited
+      && options.deleted === deleted);
+    },
+
     getUserProjects() {
       const projectList = this.getProjects();
 
