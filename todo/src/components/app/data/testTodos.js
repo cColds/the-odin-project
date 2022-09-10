@@ -1,3 +1,6 @@
+import testProjects from './testProjects';
+
+const copyTestProjects = [...testProjects];
 const DAY = 86400 * 1000;
 const WORDS = [
   'Luctus', 'Vel', 'Augue', 'Maecenas', 'Aptent', 'Sollicitudin', 'Amet',
@@ -42,6 +45,10 @@ const WORDS = [
   'Varius', 'Duis', 'Blandit', 'Vestibulum', 'Scelerisque', 'Egestas', 'Mi', 'Tellus', 'Quisque',
 ];
 
+copyTestProjects.push({
+  id: 'inbox',
+});
+
 export default () => {
   const rndDueDate = () => new Date().getTime() + Math.floor(
     Math.random() * (DAY * 100) - (DAY * 14),
@@ -53,13 +60,14 @@ export default () => {
     todos.push({
       id: crypto.randomUUID(),
       title: WORDS[Math.floor(Math.random() * WORDS.length)],
-      description: new Array(Math.floor(Math.random() * 28 + 3))
+      description: new Array(Math.floor(Math.random() * 61))
         .fill(0)
         .map(() => WORDS[Math.floor(Math.random() * WORDS.length)])
-        .join(' '),
+        .join(' ')
+        .slice(0, 60),
       dueDate: isToday() ? new Date().getTime() : rndDueDate(),
       priority: Math.max(0, Math.floor(Math.random() * 5) - 1),
-      projectId: 'inbox',
+      projectId: copyTestProjects[Math.floor(Math.random() * copyTestProjects.length)].id,
       isCompleted: Math.random() > 0.7,
     });
   }

@@ -8,6 +8,7 @@ import storage from '../../modules/storage';
 
 import Modal from '../modal/modal';
 import Forms from '../forms/forms';
+import testProjects from './data/testProjects';
 
 export default class AppController {
   constructor(module, view) {
@@ -358,7 +359,13 @@ export default class AppController {
 
     // Load Local Storage
     storage.load('projects').then((projects) => {
-      projects.forEach((projectData) => self.createTab(projectData));
+      const userProjects = projects.length === 0 ? testProjects : projects;
+
+      userProjects.forEach((projectData) => self.createTab(projectData));
+
+      if (projects.length === 0) {
+        storage.save('projects', appData.getUserProjects());
+      }
     });
 
     storage.load('todos').then((res) => {
