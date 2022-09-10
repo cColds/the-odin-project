@@ -11,6 +11,18 @@ export default class ModalController {
     return self.module.events;
   }
 
+  get body() {
+    const self = this;
+
+    return self.view.elements.modalBody;
+  }
+
+  remove() {
+    const self = this;
+
+    self.events.publish('remove');
+  }
+
   close() {
     const self = this;
 
@@ -23,52 +35,30 @@ export default class ModalController {
     self.events.publish('open');
   }
 
-  setContent({
-    title = 'Modal',
-    isCritical = false,
-    bodyRender = null,
-    submit = null,
-    reset = null,
-  }) {
-    const self = this;
-
-    self.module.setContent({
-      title, isCritical, bodyRender, submit, reset,
-    });
-  }
-
   render({ node, appendType = 'append' }) {
     const self = this;
 
     self.events.publish('render', { node, appendType });
 
-    const {
-      overlay,
-      closeBtn,
-      resetBtn,
-      submitBtn,
-    } = self.view.elements;
+    const { modal, overlay, closeBtn } = self.view.elements;
+    const { open } = self.module;
 
     overlay.addEventListener('click', () => self.close());
     closeBtn.addEventListener('click', () => self.close());
-    resetBtn.addEventListener('click', () => {
-      if (typeof self.module.reset === 'function') {
-        self.module.reset();
+
+    window.addEventListener('animationend', ({ animationName }) => {
+      if (animationName === 'modal_open-container') {
+        modal.classList.remove('modal_open');
       }
 
-      self.close();
-      self.events.publish('reset');
-    });
-    submitBtn.addEventListener('click', () => {
-      if (typeof self.module.submit === 'function') {
-        if (self.module.submit()) {
-          self.close();
-          self.events.publish('submit');
-        }
-      } else {
-        self.close();
-        self.events.publish('submit');
+      if (animationName === 'modal_close-overlay') {
+        modal.classList.remove('modal_close');
+        self.remove();
       }
     });
+
+    if (open) {
+      self.open();
+    }
   }
 }

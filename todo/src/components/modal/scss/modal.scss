@@ -9,7 +9,6 @@
   bottom: 0;
   left: 0;
   z-index: 10000;
-  pointer-events: none;
 
   & .modal-overlay {
     background-color: $color-overlay;
@@ -18,8 +17,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0;
-    transition: opacity .2s;
   }
 
   & .modal-container {
@@ -31,11 +28,8 @@
     max-width: 420px;
     top: 50%;
     margin: 0 auto;
-    opacity: 0;
     overflow: hidden;
-    transform: translateY(-145%);
-    transition: opacity .2s,
-                transform .3s;
+    transform: translateY(-50%);
 
     & .modal__header {
       background-color: $color-dark-l;
@@ -52,7 +46,7 @@
 
       & .modal__title {
         color: $color-white;
-        font-size: 18px;
+        font-size: 16px;
       }
     }
 
@@ -62,62 +56,76 @@
       padding: 30px;
       overflow: auto;
     }
+  }
 
-    & .modal__footer {
-      border-top: 1px solid $color-gray-mx;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 70px;
-      padding: 0 30px;
+  &.modal_open {
+    display: block;
 
-      & .btn {
-        min-width: 120px;
-        height: 40px;
+    & .modal-overlay {
+      animation: modal_open-overlay 0.2s forwards;
+    }
+
+    & .modal-container {
+      pointer-events: none;
+      animation: modal_open-container 0.3s forwards;
+    }
+
+    @keyframes modal_open-overlay {
+      from {
+        opacity: 0;
       }
 
-      & .modal__reset-btn {
-        border-color: transparent;
+      to {
+        opacity: 1;
+      }
+    }
 
-        &:hover {
-          background-color: transparent;
-          color: $color-gray;
-        }
-
-        &:active {
-          background-color: transparent;
-          color: $color-white;
-        }
+    @keyframes modal_open-container {
+      from {
+        opacity: 0;
+        transform: translateY(-145%);
       }
 
-      & .modal__submit-btn {
-        border-color: $color-gray-mx;
-        color: $color-gray-m;
-
-        &:hover {
-          background-color: $color-dark-l;
-          color: $color-white-m;
-        }
-
-        &:active {
-          background-color: $color-action;
-          border-color: $color-action;
-          color: $color-white;
-        }
+      to {
+        opacity: 1;
+        transform: translateY(-50%);
+        pointer-events: all;
       }
     }
   }
 
-  &.modal_open {
-    pointer-events: all;
+  &.modal_close {
+    display: block;
 
     & .modal-overlay {
-      opacity: 1;
+      animation: modal_close-overlay 0.3s forwards;
     }
 
     & .modal-container {
-      opacity: 1;
-      transform: translateY(-50%);
+      pointer-events: none;
+      animation: modal_close-container 0.2s forwards;
+    }
+
+    @keyframes modal_close-overlay {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes modal_close-container {
+      from {
+        opacity: 1;
+        transform: translateY(-50%);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(-145%);
+      }
     }
   }
 }

@@ -5,9 +5,9 @@ import ModalView from './modal.view';
 import ModalController from './modal.controller';
 
 export default class Modal {
-  constructor() {
+  constructor(options = {}) {
     const self = this;
-    const module = new ModalModule();
+    const module = new ModalModule(options);
     const view = new ModalView(module);
     const controller = new ModalController(module, view);
 
