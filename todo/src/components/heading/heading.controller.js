@@ -23,19 +23,14 @@ export default class HeadingController {
     self.module.setData(data);
   }
 
-  // createTodo() {
-  //   const self = this;
-  //   const { id, options: { added } } = self.data;
+  createTodo() {
+    const self = this;
+    const { id, options: { added } } = self.data;
 
-  //   if (added) {
-  //     const testTodos = getTestTodos();
-  //     const testTodosLen = testTodos.length;
-  //     const rndIndex = Math.floor(Math.random() * testTodosLen);
-  //     const todoData = testTodos[rndIndex];
-
-  //     self.events.publish('createTodo', Object.assign(todoData, { projectId: id }));
-  //   }
-  // }
+    if (added) {
+      self.events.publish('createTodo', id);
+    }
+  }
 
   editProject() {
     const self = this;

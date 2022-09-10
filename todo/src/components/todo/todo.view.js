@@ -9,7 +9,7 @@ export default class TodoView {
 
     self.module.events
       .subscribe('render', ({ node, appendType }) => self.render({ node, appendType }))
-      .subscribe('editTodo', () => self.update());
+      .subscribe('update', () => self.update());
   }
 
   get priorityClass() {

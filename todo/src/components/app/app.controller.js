@@ -57,11 +57,11 @@ export default class AppController {
   editTodo(id, todoData) {
     const self = this;
 
+    self.module.editTodo(id, todoData);
     self.updateTabs();
+    self.createTodos(appData.activeProjectId);
 
     storage.save('todos', appData.getTodos());
-
-    return todoData;
   }
 
   createTodo(todo, projectId) {
@@ -75,7 +75,7 @@ export default class AppController {
 
       // Events
       components[todo.id].events
-        .subscribe('editTodo', (todoData) => self.editTodo(todo.id, todoData))
+        .subscribe('editTodo', (todoObj) => self.formEditTodo(todoObj))
         .subscribe('deleteTodo', (id) => self.formRemoveTodo(id))
         .subscribe('goToParent', ({ projectId: parentId, id }) => self.goToTodo(parentId, id));
     }
@@ -252,6 +252,65 @@ export default class AppController {
     self.modalForm(options);
   }
 
+  formCreateTodo(projectId) {
+    const self = this;
+    const project = self.data.getProject(projectId);
+    const { options: { added } } = project;
+
+    if (added) {
+      const options = {
+        modalOpt: {
+          title: 'Create Todo',
+          open: true,
+        },
+
+        formOpt: {
+          type: 'create-todo',
+          submit: {
+            title: 'Create',
+            callback: (todoData) => {
+              const todo = self.loadTodo(todoData);
+              self.updateTabs();
+              self.createTodo(todo, todoData.projectId);
+
+              storage.save('todos', appData.getTodos());
+            },
+          },
+        },
+      };
+
+      self.modalForm(options);
+    }
+  }
+
+  formEditTodo(todo) {
+    const self = this;
+
+    const options = {
+      modalOpt: {
+        title: 'Edit Todo',
+        open: true,
+      },
+
+      formOpt: {
+        type: 'create-todo',
+        values: {
+          title: todo.title,
+          description: todo.description,
+          priority: todo.priority,
+          dueDate: todo.dueDate,
+          project: appData.getProject(todo.projectId),
+        },
+        submit: {
+          title: 'Edit',
+          callback: (todoData) => self.editTodo(todo.id, todoData),
+        },
+      },
+    };
+
+    self.modalForm(options);
+  }
+
   formRemoveTodo(id) {
     const self = this;
     const { title: todoTitle } = self.data.getTodo(id);
@@ -324,13 +383,7 @@ export default class AppController {
     });
 
     // Events
-    heading.events.subscribe('createTodo', (todoData) => {
-      const todo = self.loadTodo(Object.assign(todoData));
-      self.updateTabs();
-      self.createTodo(todo, todoData.projectId);
-
-      storage.save('todos', appData.getTodos());
-    });
+    heading.events.subscribe('createTodo', (id) => self.formCreateTodo(id));
     heading.events.subscribe('editProject', (id) => self.formEditProject(id, heading));
     heading.events.subscribe('removeProject', (id) => self.formRemoveProject(id, heading));
   }

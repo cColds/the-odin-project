@@ -198,7 +198,7 @@ export default class AppView {
 
       <main class="app__content">
         <div class="content-wrapper">
-          <div class="todo__list"></div>
+          <ul class="todo__list"></ul>
         </div>
       </main>
     `;

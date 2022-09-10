@@ -17,12 +17,18 @@ export default class TodoController {
     return self.module.data;
   }
 
-  editTodo(todoData) {
+  update() {
+    const self = this;
+
+    self.events.publish('update');
+  }
+
+  editTodo() {
     const self = this;
     const { isExpired } = self.data;
 
     if (!isExpired) {
-      self.module.editTodo(todoData);
+      self.events.publish('editTodo', self.data);
     }
   }
 
@@ -61,26 +67,8 @@ export default class TodoController {
       }
     });
 
-    todoEditBtn.addEventListener('click', () => {
-      import('../app/data/testTodos').then(({ default: getTestTodos }) => {
-        const todos = getTestTodos();
-        const rndId = Math.floor(Math.random() * todos.length);
-        const {
-          title,
-          description,
-          dueDate,
-          priority,
-          isCompleted,
-        } = todos[rndId];
-
-        self.editTodo({
-          title, description, dueDate, priority, isCompleted,
-        });
-      });
-    });
-
+    todoEditBtn.addEventListener('click', () => self.editTodo());
     todoDeleteBtn.addEventListener('click', () => self.deleteTodo());
-
     todoParentBtn.addEventListener('click', () => self.goToParent());
   }
 }

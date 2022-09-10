@@ -18,6 +18,12 @@
         align-items: center;
         justify-content: space-between;
       }
+
+      &.form-block_radio {
+        justify-content: flex-start;
+        gap: 15px;
+        margin-left: auto;
+      }
     }
 
     & .form__label {
@@ -67,7 +73,7 @@
       }
     }
 
-    & .form__input_radio {
+    & .form__input-radio {
       display: none;
 
       &:checked + label[class~="btn"] {

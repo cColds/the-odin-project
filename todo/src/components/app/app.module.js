@@ -25,6 +25,17 @@ export default class AppModule {
     self.events.publish('deleteTodo', id);
   }
 
+  editTodo(id, todoData) {
+    const self = this;
+    const todo = appData.getTodo(id);
+
+    if (todo) {
+      todo.setData(todoData);
+    }
+
+    self.events.publish('editTodo', todo);
+  }
+
   loadTodo(todo) {
     const self = this;
 

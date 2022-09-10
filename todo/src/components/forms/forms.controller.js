@@ -27,12 +27,13 @@ export default class FormsController {
       };
     }
 
-    if (type === 'create-task') {
+    if (type === 'create-todo') {
       return {
-        title: formData.get('task-title'),
-        description: formData.get('task-description'),
-        priority: +formData.get('task-priority'),
-        dueDate: inputs.dueDate.value,
+        title: formData.get('todo-title'),
+        description: formData.get('todo-description'),
+        priority: +formData.get('todo-priority'),
+        dueDate: inputs.dueDate.value?.getTime() || null,
+        projectId: inputs.project.value?.id || null,
       };
     }
 
@@ -58,7 +59,7 @@ export default class FormsController {
       callback(self.values);
     }
 
-    self.events.publish('reset', self.values);
+    self.events.publish('submit', self.values);
   }
 
   render({ node, appendType = 'append' }) {

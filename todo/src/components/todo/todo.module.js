@@ -6,12 +6,4 @@ export default class TodoModule {
     self.events = new PubSub();
     self.data = data;
   }
-
-  editTodo(todoData) {
-    const self = this;
-
-    self.data.setData(todoData);
-
-    self.events.publish('editTodo');
-  }
 }

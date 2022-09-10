@@ -1,5 +1,6 @@
 import DatePicker from '../datePicker/datePicker';
 import Dropdown from '../dropdown/dropdown';
+import appData from '../app/modules/app.data';
 
 export default class FormsView {
   constructor(module) {
@@ -11,70 +12,109 @@ export default class FormsView {
       .subscribe('render', ({ node, appendType }) => self.render({ node, appendType }));
   }
 
-  renderCreateTask() {
+  renderCreateTodo() {
     const self = this;
-    const { form } = self.elements;
+    const { formBody } = self.elements;
+    const { values } = self.module;
 
-    form.innerHTML = `
-      <div class="input-block">
-        <h3 class="input__label">Title</h3>
-        <input id="task-title" class="input" type="text" name="task-title" placeholder="Task title">
+    formBody.innerHTML = `
+      <div class="form-block">
+        <label class="form__label" for="todo-title">Title</label>
+        <input
+          id="todo-title"
+          class="form__input"
+          type="text"
+          minlength="3"
+          maxlength="16"
+          name="todo-title"
+          placeholder="Todo Title"
+          required
+        >
       </div>
 
-      <div class="input-block">
-        <h3 class="input__label">Description</h3>
-        <textarea id="task-description" class="input" type="text" name="task-description" placeholder="Task description"></textarea>
+      <div class="form-block">
+        <label class="form__label" for="todo-description">Description</label>
+        <textarea
+          id="todo-description"
+          class="form__input"
+          maxlength="60"
+          name="todo-description"
+          placeholder="Todo Description"
+          required
+        ></textarea>
       </div>
 
-      <div class="input-block">
-        <h3 class="input__label">Due Date</h3>
+      <div class="form-block">
+        <label class="form__label" for="todo-description">Due Date</label>
       </div>
 
-      <div class="input-block input-block-line">
-        <h3 class="input__label">Priority</h3>
+      <div class="form-block form-block_inline">
+        <label class="form__label">Priority</label>
 
-        <div class="radio-block">
-          <input id="no-priority" class="input-radio" type="radio" name="task-priority" value="0" checked>
-          <label for="no-priority" class="btn"><span class="material-symbols-rounded">done</span></label>
+        <div class="form-block form-block_inline form-block_radio">
+          <input id="todo-priority-no" class="form__input-radio" type="radio" name="todo-priority" value="0" checked>
+          <label for="todo-priority-no" class="btn"><span class="material-symbols-rounded">done</span></label>
 
-          <input id="priority-remember" class="input-radio" type="radio" name="task-priority" value="1">
-          <label for="priority-remember" class="btn btn_remember"><span class="material-symbols-rounded">done</span></label>
+          <input id="todo-priority-remember" class="form__input-radio" type="radio" name="todo-priority" value="1">
+          <label for="todo-priority-remember" class="btn btn_remember"><span class="material-symbols-rounded">done</span></label>
 
-          <input id="priority-important" class="input-radio" type="radio" name="task-priority" value="2">
-          <label for="priority-important" class="btn btn_important"><span class="material-symbols-rounded">done</span></label>
+          <input id="todo-priority-important" class="form__input-radio" type="radio" name="todo-priority" value="2">
+          <label for="todo-priority-important" class="btn btn_important"><span class="material-symbols-rounded">done</span></label>
 
-          <input id="priority-critical" class="input-radio" type="radio" name="task-priority" value="3">
-          <label for="priority-critical" class="btn btn_critical"><span class="material-symbols-rounded">done</span></label>
+          <input id="todo-priority-critical" class="form__input-radio" type="radio" name="todo-priority" value="3">
+          <label for="todo-priority-critical" class="btn btn_critical"><span class="material-symbols-rounded">done</span></label>
         </div>
       </div>
 
-      <div class="input-block">
-        <h3 class="input__label">Project</h3>
+      <div class="form-block">
+        <label class="form__label">Project</label>
       </div>
     `;
 
     const datePicker = new DatePicker().controller;
     datePicker.render({
-      node: form.querySelectorAll('.input-block')[2],
-      classList: ['input'],
+      node: formBody.querySelectorAll('.form-block')[2],
+      classList: ['form__input'],
     });
 
-    const dropdown = new Dropdown({
-      items: [
-      ],
-    }).controller;
+    const items = [
+      ...appData.getProjectsByOptions({ added: true }),
+      ...appData.getUserProjects(),
+    ];
+    const currentProject = items.filter(({ id }) => id === appData.activeProjectId)[0];
+    let selectedId = items.indexOf(currentProject);
+
+    if (selectedId < 0) {
+      selectedId = null;
+    }
+
+    const dropdown = new Dropdown({ items, selectedId }).controller;
     dropdown.render({
-      node: form.querySelectorAll('.input-block')[4],
-      classList: ['input'],
+      node: formBody.querySelectorAll('.form-block')[5],
+      classList: ['form__input'],
     });
 
     self.elements.inputs = {
-      title: form.querySelector('#task-title'),
-      description: form.querySelector('#task-description'),
-      priority: form.querySelector('[name=task-priority]:checked'),
+      title: formBody.querySelector('#todo-title'),
+      description: formBody.querySelector('#todo-description'),
+      priority: formBody.querySelectorAll('[name=todo-priority]'),
       dueDate: datePicker,
       project: dropdown,
     };
+
+    self.elements.inputs.title.value = values?.title || null;
+    self.elements.inputs.description.value = values?.description || null;
+    if (values.priority) {
+      const index = values.priority;
+      self.elements.inputs.priority[index].checked = true;
+    }
+    if (values.dueDate) {
+      self.elements.inputs.dueDate.setValue(new Date(values.dueDate));
+    }
+    if (values.project) {
+      const index = items.indexOf(values.project);
+      self.elements.inputs.project.setValue(index);
+    }
   }
 
   renderCreateProject() {
@@ -157,6 +197,8 @@ export default class FormsView {
       self.renderMessage();
     } else if (type === 'create-project') {
       self.renderCreateProject();
+    } else if (type === 'create-todo') {
+      self.renderCreateTodo();
     }
   }
 }
