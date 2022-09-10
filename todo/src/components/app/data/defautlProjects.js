@@ -21,6 +21,7 @@ export default [
     options: {
       deleted: false,
       edited: false,
+      added: false,
       parent: true,
     },
   },
