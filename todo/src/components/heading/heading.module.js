@@ -7,14 +7,6 @@ export default class HeadingModule {
     self.data = data;
   }
 
-  editData(data) {
-    const self = this;
-
-    self.data.setData(data);
-
-    self.events.publish('editData');
-  }
-
   setData(data) {
     const self = this;
 

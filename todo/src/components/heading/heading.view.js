@@ -7,7 +7,6 @@ export default class HeadingView {
     self.module.events
       .subscribe('render', ({ node, appendType }) => self.render({ node, appendType }))
       .subscribe('setData', () => self.update())
-      .subscribe('editData', () => self.update())
       .subscribe('update', () => self.update());
   }
 

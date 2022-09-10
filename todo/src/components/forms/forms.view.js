@@ -103,6 +103,7 @@ export default class FormsView {
     };
 
     self.elements.inputs.projectTitle.value = values?.projectTitle || null;
+    self.elements.inputs.projectTitle.focus();
   }
 
   renderMessage() {
@@ -110,7 +111,7 @@ export default class FormsView {
     const { formBody } = self.elements;
     const { message } = self.module;
 
-    formBody.innerHTML = `<p class="form__message">${message}<p>`;
+    formBody.innerHTML = `<p class="form__message">${message}</p>`;
   }
 
   render({ node, appendType }) {

@@ -67,10 +67,4 @@ export default class AppModule {
     storage.save('projects', appData.getUserProjects());
     storage.save('todos', appData.getTodos());
   }
-
-  editProject(projectData) {
-    const self = this;
-
-    return { self, projectData };
-  }
 }

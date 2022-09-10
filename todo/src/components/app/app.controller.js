@@ -76,7 +76,7 @@ export default class AppController {
       // Events
       components[todo.id].events
         .subscribe('editTodo', (todoData) => self.editTodo(todo.id, todoData))
-        .subscribe('deleteTodo', (id) => self.deletTodo(id))
+        .subscribe('deleteTodo', (id) => self.formRemoveTodo(id))
         .subscribe('goToParent', ({ projectId: parentId, id }) => self.goToTodo(parentId, id));
     }
   }
@@ -136,10 +136,13 @@ export default class AppController {
     return project;
   }
 
-  editProject(projectData) {
+  editProject(id, projectData) {
     const self = this;
+    const project = self.data.getProject(id);
 
-    self.module.editProject(projectData);
+    if (project) {
+      project.setData(projectData);
+    }
 
     self.updateTabs();
     storage.save('projects', appData.getUserProjects());
@@ -170,6 +173,106 @@ export default class AppController {
     forms.events
       .subscribe('reset', () => modal.close())
       .subscribe('submit', () => modal.close());
+  }
+
+  formCreateProject() {
+    const self = this;
+    const options = {
+      modalOpt: {
+        title: 'Create Project',
+        open: true,
+      },
+
+      formOpt: {
+        type: 'create-project',
+        submit: {
+          title: 'Create',
+          callback: ({ title }) => {
+            const project = self.createTab({ title });
+            self.changeTab(project.id);
+            storage.save('projects', appData.getUserProjects());
+          },
+        },
+      },
+    };
+
+    self.modalForm(options);
+  }
+
+  formEditProject(id, heading = null) {
+    const self = this;
+    const { title: projectTitle } = self.data.getProject(id);
+    const options = {
+      modalOpt: {
+        title: 'Edit Project',
+        open: true,
+      },
+
+      formOpt: {
+        type: 'create-project',
+        values: {
+          projectTitle,
+        },
+        submit: {
+          title: 'Edit',
+          callback: ({ title }) => {
+            self.editProject(id, { title });
+            heading?.update();
+          },
+        },
+      },
+    };
+
+    self.modalForm(options);
+  }
+
+  formRemoveProject(id, heading = null) {
+    const self = this;
+    const { title: projectTitle } = self.data.getProject(id);
+    const options = {
+      modalOpt: {
+        title: 'Remove Project',
+        open: true,
+      },
+
+      formOpt: {
+        type: 'message',
+        message: `Are you sure you want to delete the project\n<strong class="message_bold">${projectTitle}</strong>`,
+        submit: {
+          type: 'critical',
+          title: 'Remove',
+          callback: () => {
+            self.removeProject(id);
+            heading?.update();
+          },
+        },
+      },
+    };
+
+    self.modalForm(options);
+  }
+
+  formRemoveTodo(id) {
+    const self = this;
+    const { title: todoTitle } = self.data.getTodo(id);
+    const options = {
+      modalOpt: {
+        title: 'Remove Todo',
+        open: true,
+      },
+
+      formOpt: {
+        type: 'message',
+        message: `Are you sure you want to delete the todo\n<strong class="message_bold">${todoTitle}</strong>`,
+        submit: {
+          type: 'critical',
+          title: 'Remove',
+          callback: () => self.deletTodo(id),
+        },
+      },
+    };
+
+    self.modalForm(options);
   }
 
   render({ node, appendType = 'append' }) {
@@ -214,24 +317,7 @@ export default class AppController {
 
     // Listeners
     sidebarToggle.addEventListener('click', () => self.toggleSidebar(!data.isSidebarShown));
-    tabCreateBtn.addEventListener('click', () => self.modalForm({
-      modalOpt: {
-        title: 'Create Project',
-        open: true,
-      },
-
-      formOpt: {
-        type: 'create-project',
-        submit: {
-          title: 'Create',
-          callback: ({ title }) => {
-            const project = self.createTab({ title });
-            self.changeTab(project.id);
-            storage.save('projects', appData.getUserProjects());
-          },
-        },
-      },
-    }));
+    tabCreateBtn.addEventListener('click', () => self.formCreateProject());
 
     window.addEventListener('animationend', ({ animationName, target }) => {
       target.classList.remove(animationName);
@@ -245,7 +331,7 @@ export default class AppController {
 
       storage.save('todos', appData.getTodos());
     });
-    heading.events.subscribe('editData', (projectData) => self.editProject(projectData));
-    heading.events.subscribe('removeProject', (projectId) => self.removeProject(projectId));
+    heading.events.subscribe('editProject', (id) => self.formEditProject(id, heading));
+    heading.events.subscribe('removeProject', (id) => self.formRemoveProject(id, heading));
   }
 }
