@@ -1,0 +1,29 @@
+@import "../../../styles/colors";
+@import "../../../styles/mixins";
+@import "../../../styles/material-symbols";
+
+.popover {
+  @include shadow;
+  background-color: $color-dark;
+  border: 1px solid $color-gray-mx;
+  border-radius: 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+
+  opacity: 0;
+  transform: translateY(15%);
+  transition: opacity .5s, transform .3s;
+
+  &.popover_show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &.popover_close {
+    opacity: 0;
+    transform: translateY(15%);
+    transition: opacity .2s, transform .2s;
+  }
+}

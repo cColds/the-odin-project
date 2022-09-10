@@ -1,0 +1,115 @@
+@import "../../../styles/colors";
+@import "../../../styles/mixins";
+@import "../../../styles/material-symbols";
+
+.todo {
+  background-color: $color-dark-s;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  display: flex;
+  padding: 30px;
+  gap: 30px;
+  transition: background-color .25s, border-color .25s;
+
+  &.todo_active {
+    background-color: $color-dark;
+    border-color: $color-dark-l;
+
+    &:hover {
+      background-color: $color-dark;
+    }
+  }
+
+  &.todo_expired {
+    background-color: $color-dark;
+    border-color: $color-critical-l;
+
+    & .todo__checkbox {
+      pointer-events: none;
+    }
+
+    & .todo-edit-btn {
+      display: none;
+    }
+
+    &:hover {
+      background-color: $color-dark;
+    }
+  }
+
+  &:hover {
+    background-color: $color-dark-l;
+
+    & .todo__header .todo-controls {
+      display: flex;
+    }
+
+    & .todo__header .todo__due-date {
+      display: none;
+    }
+
+    & .todo__description {
+      white-space: normal;
+    }
+  }
+
+  & .todo__header {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    gap: 30px;
+
+    & .todo__title {
+      @include text-overflow;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    & .todo__due-date,
+    & .todo-controls {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    & .todo__due-date {
+      color: $color-gray-m;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    & .todo-controls {
+      display: none;
+      gap: 15px;
+    }
+  }
+
+  & .todo-body {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  & .todo__description {
+    @include text-overflow;
+    color: $color-gray;
+    margin-top: 15px;
+    font-size: 14px;
+    line-height: 150%;
+  }
+
+  & .todo__parent {
+    width: auto;
+    gap: 5px;
+    margin-top: 15px;
+    margin-left: auto;
+
+    &:hover {
+      color: $color-white-m;
+    }
+
+    &:active {
+      color: $color-white;
+    }
+  }
+}

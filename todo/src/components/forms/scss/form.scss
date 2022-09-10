@@ -1,0 +1,119 @@
+@import "../../../styles/colors";
+@import "../../../styles/mixins";
+@import "../../../styles/material-symbols";
+
+.form {
+  & .form__body {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    & .form-block {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      &.form-block_inline {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      &.form-block_radio {
+        justify-content: flex-start;
+        gap: 15px;
+        margin-left: auto;
+      }
+    }
+
+    & .form__label {
+      color: $color-white-m;
+      width: -moz-fit-content;
+      width: fit-content;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    & .form__message {
+      color: $color-white-m;
+      font-size: 14px;
+      text-align: center;
+
+      & .message_bold {
+        font-size: 15px;
+        font-weight: 600;
+      }
+    }
+
+    & .form__input {
+      background-color: $color-dark;
+      outline: 1px solid $color-gray-mx;
+      border-radius: 5px;
+      color: $color-white;
+      min-height: 50px;
+      padding: 15px;
+      font-weight: 500;
+      transition: outline 0.25s;
+
+      &:hover {
+        outline-color: $color-gray;
+      }
+
+      &[textarea] {
+        min-height: 90px;
+      }
+
+      &::placeholder {
+        color: $color-gray-m;
+        font-weight: 400;
+      }
+
+      &:focus-visible {
+        outline: 1px solid $color-gray;
+      }
+    }
+
+    & .form__input-radio {
+      display: none;
+
+      &:checked + label[class~="btn"] {
+        pointer-events: none;
+        background-color: $color-action;
+        border-color: $color-action;
+        color: $color-white;
+      }
+
+      &:checked + label[class~="btn_remember"] {
+        background-color: $color-remember-l;
+        border-color: $color-remember-l;
+      }
+
+      &:checked + label[class~="btn_important"] {
+        background-color: $color-important-l;
+        border-color: $color-important-l;
+      }
+
+      &:checked + label[class~="btn_critical"] {
+        background-color: $color-critical-l;
+        border-color: $color-critical-l;
+      }
+    }
+
+    & textarea[class~="input"] {
+      min-height: 90px;
+    }
+  }
+
+  & .form__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 60px;
+
+    & .btn {
+      width: auto;
+      height: auto;
+      padding: 10px 30px;
+    }
+  }
+}

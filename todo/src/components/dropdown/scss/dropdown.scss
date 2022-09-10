@@ -1,0 +1,84 @@
+@import "../../../styles/colors";
+@import "../../../styles/mixins";
+@import "../../../styles/material-symbols";
+
+.dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &.dropdown_empty {
+    & .dropdown__value {
+      color: $color-gray-m;
+      font-weight: 400;
+    }
+
+    & .dropdown__icon {
+      color: $color-gray-m;
+    }
+  }
+
+  & .dropdown__value {
+    color: $color-white;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  & .dropdown__icon {
+    color: $color-white;
+    margin-left: auto;
+  }
+}
+
+.dropdown__list {
+  @include no-select;
+
+  & .list__item {
+    color: $color-gray;
+    cursor: pointer;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 15px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color .25s, color .25s;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $color-gray-mx;
+    }
+
+    &:first-child {
+      border-radius: 5px 5px 0 0;
+    }
+
+    &:last-child {
+      border-radius: 0 0 5px 5px;
+    }
+
+    &:hover {
+      background-color: $color-dark-l;
+      color: $color-white-m;
+    }
+
+    &:active {
+      background-color: $color-action;
+      color: $color-white;
+    }
+
+    &.list__item_selected {
+      background-color: $color-action;
+      color: $color-white;
+      cursor: auto;
+    }
+
+    & .item__label {
+      @include text-overflow;
+    }
+  }
+}

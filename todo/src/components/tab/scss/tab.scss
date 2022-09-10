@@ -1,0 +1,73 @@
+@import "../../../styles/colors";
+@import "../../../styles/mixins";
+@import "../../../styles/material-symbols";
+
+.tab {
+  @include no-select;
+  border-radius: 5px;
+  color: $color-white-m;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0 20px;
+  gap: 25px;
+  transition: background-color 0.25s, color 0.25s;
+
+  & .tab__icon {
+    padding: 10px;
+    font-size: 20px;
+  }
+
+  & .tab__name {
+    @include text-overflow;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  & .tab__todo-count {
+    background-color: $color-dark-l;
+    border-radius: 5px;
+    color: $color-gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 400;
+    transition: background-color 0.25s, color 0.25s;
+  }
+
+  &:not([class*="tab_active"]) {
+    &:hover {
+      background-color: $color-dark-l;
+      color: $color-white;
+
+      & .tab__todo-count {
+        color: $color-white-m;
+      }
+    }
+
+    &:active {
+      background-color: $color-action;
+      color: $color-white;
+
+      & .tab__todo-count {
+        background-color: $color-action;
+        color: $color-white;
+      }
+    }
+  }
+
+  &_active {
+    background-color: $color-action;
+    color: $color-white;
+    cursor: default;
+
+    & .tab__todo-count {
+      background-color: $color-action;
+      color: $color-white;
+    }
+  }
+}
