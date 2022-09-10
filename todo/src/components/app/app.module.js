@@ -11,7 +11,7 @@ export default class AppModule {
   toggleSidebar(state) {
     const self = this;
 
-    self.data.setSidebarState(state);
+    self.data.isSidebarShown = state;
 
     self.events.publish('toggleSidebar', state);
   }
@@ -38,9 +38,9 @@ export default class AppModule {
 
   changeTab(projectId) {
     const self = this;
-    const prevId = self.data.getActiveProjectId();
+    const prevId = self.data.activeProjectId;
 
-    self.data.setActiveProjectId(projectId);
+    self.data.activeProjectId = projectId;
 
     self.events.publish('changeTab', {
       prevId,

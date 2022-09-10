@@ -1,17 +1,36 @@
-import Modal from '../../modal/modal';
-
 import Project from '../../../modules/project';
 import Todo from '../../../modules/todo';
 
 function AppData() {
-  const modalComponent = new Modal().controller;
   const projects = {};
   const todos = {};
-  let activeProjectId = null; /* eslint-disable-line no-unused-vars */
-  let sidebarState = true; /* eslint-disable-line no-unused-vars */
+  let activeProjectId = null;
+  let isSidebarShown = true;
+  let app = null;
 
   return {
-    setActiveProjectId(id) {
+    set app(component) {
+      if (!app) {
+        app = component;
+      }
+    },
+
+    get app() {
+      return app;
+    },
+
+    /**
+     * @param {boolean} state
+     */
+    set isSidebarShown(state) {
+      isSidebarShown = state;
+    },
+
+    get isSidebarShown() {
+      return isSidebarShown;
+    },
+
+    set activeProjectId(id) {
       if (projects[id]) {
         activeProjectId = id;
       } else {
@@ -19,18 +38,7 @@ function AppData() {
       }
     },
 
-    /**
-      * @param {boolean} state
-    */
-    setSidebarState(state) {
-      sidebarState = state;
-    },
-
-    getModal() {
-      return modalComponent;
-    },
-
-    getActiveProjectId() {
+    get activeProjectId() {
       return activeProjectId;
     },
 
@@ -67,10 +75,6 @@ function AppData() {
       }
 
       return todoList;
-    },
-
-    getSidebarState() {
-      return sidebarState;
     },
 
     /**

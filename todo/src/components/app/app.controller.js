@@ -91,7 +91,7 @@ export default class AppController {
 
   createTodo(todo, projectId) {
     const self = this;
-    const activeProjectId = self.data.getActiveProjectId();
+    const { activeProjectId } = self.data;
 
     if (activeProjectId === projectId) {
       self.events.publish('createTodo', todo);
@@ -106,7 +106,7 @@ export default class AppController {
 
       components[todo.id].events.subscribe('deleteTodo', (id) => self.deletTodo(id));
       components[todo.id].events.subscribe('goToParent', ({ id, projectId: parentId }) => {
-        const currentProjectId = self.data.getActiveProjectId();
+        const currentProjectId = self.data.activeProjectId;
 
         if (currentProjectId !== parentId) {
           self.changeTab(parentId);
@@ -164,7 +164,7 @@ export default class AppController {
     tabs[project.id].events.subscribe('tabClick', () => self.changeTab(project.id));
 
     if (projectData.isActive) {
-      self.data.setActiveProjectId(project.id);
+      self.data.activeProjectId = project.id;
       self.changeTab(project.id);
     }
 
@@ -183,7 +183,6 @@ export default class AppController {
 
     // Elements
     const {
-      app,
       sidebarToggle,
       tabCreateBtn,
     } = self.view.elements;
@@ -192,12 +191,8 @@ export default class AppController {
     // Sidebar
     const { data } = self.module;
 
-    self.toggleSidebar(data.getSidebarState());
-
-    // Modal
-    data.getModal().render({
-      node: app,
-    });
+    data.app = this;
+    self.toggleSidebar(data.isSidebarShown);
 
     // Load Default Projects
     defautlProjects.forEach((projectData) => {
@@ -215,7 +210,7 @@ export default class AppController {
       todos.forEach((todoData) => self.loadTodo(todoData));
 
       self.updateTabs();
-      self.createTodos(appData.getActiveProjectId());
+      self.createTodos(appData.activeProjectId);
 
       if (res.length === 0) {
         storage.save('todos', appData.getTodos());
@@ -223,7 +218,7 @@ export default class AppController {
     });
 
     // Listeners
-    sidebarToggle.addEventListener('click', () => self.toggleSidebar(!data.getSidebarState()));
+    sidebarToggle.addEventListener('click', () => self.toggleSidebar(!data.isSidebarShown));
     tabCreateBtn.addEventListener('click', () => {
       const projectData = {
         title: WORDS[Math.floor(Math.random() * WORDS.length)],
@@ -265,100 +260,3 @@ export default class AppController {
     });
   }
 }
-
-/*
-
-function deleteProject(projectId) {
-  const self = this;
-
-  self.module.deleteProject(projectId);
-}
-
-function createProjectForm({ title, callback, placeholder }) {
-  const self = this;
-  const createProjectFrom = new Form({
-    type: 'create-project',
-    id: 'modal__form',
-    placeholder,
-  }).controller;
-
-  self.modal.setContent({
-    title,
-    bodyRender: createProjectFrom,
-    submit: () => {
-      const { values } = createProjectFrom;
-
-      callback(values);
-
-      return true;
-    },
-  });
-  self.modal.open();
-}
-
-function createMessageForm({ title, callback, message }) {
-  const self = this;
-  const createProjectFrom = new Form({
-    id: 'modal__form',
-    message,
-  }).controller;
-
-  self.modal.setContent({
-    title,
-    bodyRender: createProjectFrom,
-    isCritical: true,
-    submit: () => {
-      callback();
-
-      return true;
-    },
-  });
-  self.modal.open();
-}
-
-function changeProject(projectId) {
-  const self = this;
-
-  self.module.changeProject(projectId);
-
-  const { projects } = self.module;
-  const { todos } = projects[projectId];
-
-  todos.forEach((todo) => self.createTodo(todo));
-
-  const { projectTitle, projectHeaderBtn: { addBtn, editBtn, deleteBtn } } = self.view.elements;
-
-  if (addBtn) {
-    addBtn.addEventListener('click', () => console.log('add todo'));
-  }
-
-  if (editBtn) {
-    editBtn.addEventListener('click', () => self.createProjectForm({
-      title: 'Edit Project',
-      callback: ({ name }) => {
-        if (name.trim().length > 3) {
-          projects[projectId].name = name;
-          projectTitle.textContent = name;
-
-          storage.save('projects', appData.getUserProjects());
-        }
-      },
-      placeholder: {
-        name: projects[projectId].data.name,
-      },
-    }));
-  }
-
-  if (deleteBtn) {
-    deleteBtn.addEventListener('click', () => self.createMessageForm({
-      title: 'Delete Project',
-      callback: () => {
-        self.deleteProject(projectId);
-      },
-      message: `
-        Do you really want to delete the project <strong>${projects[projectId].data.name}</strong>
-      `,
-    }));
-  }
-}
-*/

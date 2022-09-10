@@ -35,7 +35,7 @@ export default class TodoView {
     const {
       title, dueDate, description, projectId, isCompleted, isExpired,
     } = self.module.data;
-    const activeProjectId = appData.getActiveProjectId();
+    const { activeProjectId } = appData;
     const { options: { parent } } = appData.getProject(activeProjectId);
     const project = appData.getProject(projectId);
 
