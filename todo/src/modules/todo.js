@@ -40,6 +40,6 @@ export default class Todo {
   get isExpired() {
     const self = this;
 
-    return vdate.isExpired(new Date(self.dueDate));
+    return self.dueDate && vdate.isExpired(new Date(self.dueDate));
   }
 }
