@@ -1,7 +1,33 @@
 const WEEK_LEN = 7;
 const CALENDAR_SIZE = 42;
+const WEEK_SHORT_NAMES = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const MONTH_SHORT_NAME = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export default {
+  get today() {
+    const today = this.dropTime(new Date());
+
+    return today;
+  },
+
+  get tomorrow() {
+    const { today } = this;
+
+    today.setDate(today.getDate() + 1);
+
+    return this.dropTime(today);
+  },
+
+  get weekend() {
+    const { today } = this;
+
+    if (today.getDay === 6 || today.getDay === 0) {
+      return this.dropTime(today);
+    }
+
+    return this.getSunday();
+  },
+
   isExpired(date) {
     const today = this.dropTime(new Date()).getTime();
     const copyDate = this.dropTime(new Date(date.getTime())).getTime();
@@ -61,6 +87,18 @@ export default {
     return this.dropTime(monday);
   },
 
+  getWeekShortName(date = new Date()) {
+    const weekName = WEEK_SHORT_NAMES[date.getDay()];
+
+    return weekName;
+  },
+
+  getMonthShortName(date = new Date()) {
+    const monthName = MONTH_SHORT_NAME[date.getMonth()];
+
+    return monthName;
+  },
+
   firstMonthDay(date = new Date()) {
     return this.dropTime(new Date(date.getFullYear(), date.getMonth(), 1));
   },
@@ -69,12 +107,19 @@ export default {
     return this.dropTime(new Date(date.getFullYear(), date.getMonth() + 1, 0));
   },
 
-  dateToText(date) {
+  dateToText(date = new Date()) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
 
     return `${day}.${month}.${year}`;
+  },
+
+  dateToShortText(date = new Date()) {
+    const weekName = this.getWeekShortName(date);
+    const monthName = this.getMonthShortName(date);
+
+    return `${weekName} ${date.getDate()} ${monthName}`;
   },
 
   calendarDays(date = new Date()) {
