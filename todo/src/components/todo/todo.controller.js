@@ -23,6 +23,18 @@ export default class TodoController {
     self.events.publish('update');
   }
 
+  completed() {
+    const self = this;
+    const { isCompleted, isExpired } = self.data;
+
+    if (!isExpired) {
+      self.data.isCompleted = !isCompleted;
+      self.update();
+
+      self.events.publish('completed');
+    }
+  }
+
   editTodo() {
     const self = this;
     const { isExpired } = self.data;
@@ -59,14 +71,7 @@ export default class TodoController {
     } = self.view.elements;
 
     // Listeners
-    todoCheckboxBtn.addEventListener('click', () => {
-      const { isCompleted, isExpired } = self.module.data;
-
-      if (!isExpired) {
-        self.editTodo({ isCompleted: !isCompleted });
-      }
-    });
-
+    todoCheckboxBtn.addEventListener('click', () => self.completed());
     todoEditBtn.addEventListener('click', () => self.editTodo());
     todoDeleteBtn.addEventListener('click', () => self.deleteTodo());
     todoParentBtn.addEventListener('click', () => self.goToParent());

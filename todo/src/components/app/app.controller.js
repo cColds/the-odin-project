@@ -78,7 +78,8 @@ export default class AppController {
       components[todo.id].events
         .subscribe('editTodo', (todoObj) => self.formEditTodo(todoObj))
         .subscribe('deleteTodo', (id) => self.formRemoveTodo(id))
-        .subscribe('goToParent', ({ projectId: parentId, id }) => self.goToTodo(parentId, id));
+        .subscribe('goToParent', ({ projectId: parentId, id }) => self.goToTodo(parentId, id))
+        .subscribe('completed', () => storage.save('todos', appData.getTodos()));
     }
   }
 
