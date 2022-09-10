@@ -144,6 +144,10 @@
   }
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 .btn {
   border: 1px solid $color-gray-m;
   border-radius: 5px;

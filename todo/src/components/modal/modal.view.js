@@ -16,6 +16,7 @@ export default class ModalView {
     const { modal } = self.elements;
 
     modal.remove();
+    document.body.classList.remove('no-scroll');
   }
 
   close() {
@@ -30,6 +31,7 @@ export default class ModalView {
     const { modal } = self.elements;
 
     modal.classList.add('modal_open');
+    document.body.classList.add('no-scroll');
   }
 
   render({ node, appendType }) {
