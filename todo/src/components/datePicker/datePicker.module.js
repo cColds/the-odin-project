@@ -7,13 +7,24 @@ export default class DatePickerModule {
     self.events = new PubSub();
     self.calendarMonth = new Date().getMonth();
     self.calendarYear = new Date().getFullYear();
+    self.today = vdate.today;
+    self.tomorrow = vdate.tomorrow;
+    self.weekend = vdate.weekend;
   }
 
   set value(date) {
     const self = this;
     const prev = self.date;
 
-    self.date = date;
+    self.date = vdate.dropTime(date);
+
+    if (date) {
+      self.calendarMonth = date.getMonth();
+      self.calendarYear = date.getFullYear();
+    } else {
+      self.calendarMonth = new Date().getMonth();
+      self.calendarYear = new Date().getFullYear();
+    }
 
     self.events.publish('setValue', { prev, current: self.date });
   }
@@ -64,12 +75,6 @@ export default class DatePickerModule {
     }
 
     self.events.publish('updateCalendar', self.calendarMonth);
-  }
-
-  renderCalendar(popover) {
-    const self = this;
-
-    self.events.publish('renderCalendar', popover);
   }
 
   getCalendarDays(month = this.calendarMonth, year = this.calendarYear) {

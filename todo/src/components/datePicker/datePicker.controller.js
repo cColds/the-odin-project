@@ -37,14 +37,24 @@ export default class DatePickerController {
     const popover = new Popover({ parent: datePicker }).controller;
 
     popover.render({ node: document.body });
-    self.module.renderCalendar(popover);
+    self.events.publish('renderCalendar', popover);
 
+    const { today, tomorrow, weekend } = self.module;
     const {
+      todayBtn,
+      tomorrowBtn,
+      weekendBtn,
+      noDateBtn,
       calendarDaysBtn,
       prevMonthBtn,
       curMonthBtn,
       nextMonthBtn,
     } = self.view.elements;
+
+    todayBtn.addEventListener('click', () => self.setValue(today));
+    tomorrowBtn.addEventListener('click', () => self.setValue(tomorrow));
+    weekendBtn.addEventListener('click', () => self.setValue(weekend));
+    noDateBtn.addEventListener('click', () => self.setValue(null));
 
     calendarDaysBtn.forEach(([element, ,], i) => {
       element.addEventListener('click', () => {

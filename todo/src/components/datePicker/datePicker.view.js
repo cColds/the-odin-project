@@ -1,3 +1,5 @@
+import vdate from '../../modules/vdate';
+
 export default class DatePickerView {
   constructor(module) {
     const self = this;
@@ -14,15 +16,18 @@ export default class DatePickerView {
   setValue({ prev, current }) {
     const self = this;
     const { calendarDaysBtn } = self.elements;
-    const prevBtn = calendarDaysBtn.filter((btn) => btn[1] === prev)[0];
-    const currentBtn = calendarDaysBtn.filter((btn) => btn[1] === current)[0];
 
-    prevBtn?.[0].classList.remove('date_active');
-    currentBtn?.[0].classList.add('date_active');
+    if (calendarDaysBtn) {
+      const prevBtn = calendarDaysBtn.filter((btn) => btn[1] === prev)[0];
+      const currentBtn = calendarDaysBtn.filter((btn) => btn[1] === current)[0];
+
+      prevBtn?.[0].classList.remove('date_active');
+      currentBtn?.[0].classList.add('date_active');
+
+      self.module.events.publish('valueSetted');
+    }
 
     self.update();
-
-    self.module.events.publish('valueSetted');
   }
 
   updateCalendar() {
@@ -113,6 +118,13 @@ export default class DatePickerView {
 
   renderCalendar(popover) {
     const self = this;
+    const { today, tomorrow, weekend } = self.module;
+    const { calendar } = self.elements;
+
+    if (calendar) {
+      calendar.remove();
+      delete self.elements.calendar;
+    }
 
     self.elements.calendar = document.createElement('div');
     self.elements.calendar.classList.add('date-picker__calendar');
@@ -122,19 +134,19 @@ export default class DatePickerView {
         <button id="today-btn" class="btn calendar__btn" type="button" aria-label="Date Today">
           <span class="material-symbols-rounded btn-icon">today</span>
           Today
-          <span class="btn__week-day">Fr</span>
+          <span class="btn__week-day">${vdate.getWeekShortName(today)}</span>
         </button>
 
         <button id="tomorrow-btn" class="btn calendar__btn" type="button" aria-label="Date Tomorrow">
           <span class="material-symbols-rounded btn-icon">sunny</span>
           Tomorrow
-          <span class="btn__week-day">Sa</span>
+          <span class="btn__week-day">${vdate.getWeekShortName(tomorrow)}</span>
         </button>
 
         <button id="weekend-btn" class="btn calendar__btn" type="button" aria-label="Date Weekend">
           <span class="material-symbols-rounded btn-icon">weekend</span>
           Weekend
-          <span class="btn__week-day">Sa 3 Sep</span>
+          <span class="btn__week-day">${vdate.dateToShortText(weekend)}</span>
         </button>
 
         <button id="no-date-btn" class="btn calendar__btn" type="button" aria-label="Date None">
