@@ -17,12 +17,6 @@ export default class TodoController {
     return self.module.data;
   }
 
-  update() {
-    const self = this;
-
-    self.events.publish('update');
-  }
-
   editTodo(todoData) {
     const self = this;
     const { isExpired } = self.data;
@@ -50,7 +44,6 @@ export default class TodoController {
     const self = this;
 
     self.events.publish('render', { node, appendType });
-    self.update();
 
     const {
       todoCheckboxBtn,

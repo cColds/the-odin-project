@@ -12,6 +12,6 @@ export default class TodoModule {
 
     self.data.setData(todoData);
 
-    self.events.publish('update');
+    self.events.publish('editTodo');
   }
 }

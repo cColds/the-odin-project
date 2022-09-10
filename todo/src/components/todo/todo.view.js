@@ -9,7 +9,6 @@ export default class TodoView {
 
     self.module.events
       .subscribe('render', ({ node, appendType }) => self.render({ node, appendType }))
-      .subscribe('update', () => self.update())
       .subscribe('editTodo', () => self.update());
   }
 
@@ -120,5 +119,7 @@ export default class TodoView {
     self.elements.todoParentBtn = self.elements.todo.querySelector('.todo__parent');
     self.elements.todoParentBtnIcon = self.elements.todo.querySelector('.parent__icon');
     self.elements.todoParentBtnLabel = self.elements.todo.querySelector('.parent__label');
+
+    self.update();
   }
 }
