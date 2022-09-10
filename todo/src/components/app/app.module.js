@@ -1,5 +1,6 @@
 import PubSub from '../../libs/pubSub';
 import appData from './modules/app.data';
+import storage from '../../modules/storage';
 
 export default class AppModule {
   constructor() {
@@ -62,5 +63,14 @@ export default class AppModule {
     self.data.removeProject(projectId);
 
     self.events.publish('removeProject', projectId);
+
+    storage.save('projects', appData.getUserProjects());
+    storage.save('todos', appData.getTodos());
+  }
+
+  editProject(projectData) {
+    const self = this;
+
+    return { self, projectData };
   }
 }

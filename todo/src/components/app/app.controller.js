@@ -74,8 +74,13 @@ export default class AppController {
     self.module.toggleSidebar(state);
   }
 
-  goToTodo(id) {
+  goToTodo(projectId, id) {
     const self = this;
+    const currentProjectId = self.data.activeProjectId;
+
+    if (currentProjectId !== projectId) {
+      self.changeTab(projectId);
+    }
 
     self.events.publish('goToTodo', id);
   }
@@ -89,6 +94,16 @@ export default class AppController {
     storage.save('todos', appData.getTodos());
   }
 
+  editTodo(id, todoData) {
+    const self = this;
+
+    self.updateTabs();
+
+    storage.save('todos', appData.getTodos());
+
+    return todoData;
+  }
+
   createTodo(todo, projectId) {
     const self = this;
     const { activeProjectId } = self.data;
@@ -99,20 +114,10 @@ export default class AppController {
       const { todos: components } = self.view.components;
 
       // Events
-      components[todo.id].events.subscribe('update', () => {
-        storage.save('todos', appData.getTodos());
-        self.updateTabs();
-      });
-
-      components[todo.id].events.subscribe('deleteTodo', (id) => self.deletTodo(id));
-      components[todo.id].events.subscribe('goToParent', ({ id, projectId: parentId }) => {
-        const currentProjectId = self.data.activeProjectId;
-
-        if (currentProjectId !== parentId) {
-          self.changeTab(parentId);
-        }
-        self.goToTodo(id);
-      });
+      components[todo.id].events
+        .subscribe('editTodo', (todoData) => self.editTodo(todo.id, todoData))
+        .subscribe('deleteTodo', (id) => self.deletTodo(id))
+        .subscribe('goToParent', ({ projectId: parentId, id }) => self.goToTodo(parentId, id));
     }
   }
 
@@ -171,10 +176,25 @@ export default class AppController {
     return project;
   }
 
+  editProject(projectData) {
+    const self = this;
+
+    self.module.editProject(projectData);
+
+    self.updateTabs();
+    storage.save('projects', appData.getUserProjects());
+  }
+
   removeProject(projectId) {
     const self = this;
 
     self.module.removeProject(projectId);
+
+    self.updateTabs();
+
+    if (projectId !== 'inbox') {
+      self.changeTab('inbox');
+    }
   }
 
   render({ node, appendType = 'append' }) {
@@ -243,20 +263,7 @@ export default class AppController {
 
       storage.save('todos', appData.getTodos());
     });
-    heading.events.subscribe('editData', () => {
-      self.updateTabs();
-      storage.save('projects', appData.getUserProjects());
-    });
-    heading.events.subscribe('removeProject', (id) => {
-      self.removeProject(id);
-      self.updateTabs();
-
-      if (id !== 'inbox') {
-        self.changeTab('inbox');
-      }
-
-      storage.save('projects', appData.getUserProjects());
-      storage.save('todos', appData.getTodos());
-    });
+    heading.events.subscribe('editData', (projectData) => self.editProject(projectData));
+    heading.events.subscribe('removeProject', (projectId) => self.removeProject(projectId));
   }
 }
