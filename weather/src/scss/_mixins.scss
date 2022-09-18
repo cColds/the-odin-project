@@ -1,0 +1,10 @@
+@mixin shadow {
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, .15);
+}
+
+@mixin no-select {
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
