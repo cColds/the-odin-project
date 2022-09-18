@@ -1,5 +1,4 @@
 @import './fonts';
-@import './material-symbols';
 @import './colors';
 @import './mixins';
 
@@ -14,15 +13,6 @@
 
 *:focus-visible {
   outline: 1px solid $color-white;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Nunito', sans-serif;
 }
 
 button {
@@ -41,6 +31,12 @@ a {
   text-decoration: none;
 }
 
+ul,
+ol,
+li {
+  list-style: none;
+}
+
 body {
   background-color: $color-dark;
   color: $color-white;
@@ -48,5 +44,6 @@ body {
 }
 
 .svg-icon {
+  display: block;
   width: 20px;
 }
