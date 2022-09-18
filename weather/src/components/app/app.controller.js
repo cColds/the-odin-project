@@ -46,8 +46,5 @@ export default class AppController {
     searchInput.addEventListener('keyup', ({ target: { value } }) => this.searchInput(value));
     searchInput.addEventListener('input', ({ target: { value } }) => this.searchInput(value));
     searchBtn.addEventListener('click', () => this.searchWeather());
-
-    this.module.inputValue = 'moscow';
-    this.searchWeather();
   }
 }
