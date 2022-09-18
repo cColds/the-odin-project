@@ -28,6 +28,10 @@ module.exports = {
           'sass-loader',
         ],
       },
+      {
+        test: /\.svg$/,
+        use: 'svg-inline-loader',
+      },
     ],
   },
   plugins: [
