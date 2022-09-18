@@ -1,0 +1,156 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
+.weather {
+  background-color: $color-dark-m;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 60px;
+  gap: 30px;
+
+  & .weather__header {
+    & .header-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    & .weather__name {
+      color: $color-white;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    & .weather__country {
+      color: $color-gray;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    & .weather__date {
+      color: $color-gray-m;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 5px;
+
+      & .date {
+        font-size: 13px;
+      }
+    }
+  }
+
+  & .weather__data {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    & .weather__temp {
+      color: $color-white;
+      font-weight: 400;
+      font-size: 64px;
+    }
+
+    & .weather__icon .svg-icon {
+      color: $color-white;
+      width: 50px;
+    }
+
+    & .weather__description {
+      & .weather__type {
+        color: $color-white;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      & .weather__feels {
+        color: $color-gray-m;
+        font-size: 14px;
+        font-weight: 500;
+        margin-top: 5px;
+      }
+    }
+  }
+
+  & .weather__additional {
+    display: flex;
+    justify-content: space-between;
+
+    & li {
+      display: flex;
+      align-items: center;
+      padding: 5px;
+      gap: 5px;
+      color: $color-gray-m;
+
+      & svg {
+        width: 20px;
+      }
+    }
+  }
+
+  & .checkbox {
+    @include no-select;
+    background-color: $color-dark-l;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    height: 30px;
+
+    & .checkbox__input {
+      background: none;
+      border: none;
+      outline: none;
+      display: none;
+      visibility: hidden;
+      width: 0;
+      height: 0;
+    }
+
+    & .checkbox__label {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      position: relative;
+      height: 100%;
+    }
+
+    & .checkbox__type {
+      color: $color-gray;
+      width: 100%;
+      padding: 5px 10px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 2;
+      transition: color .25s;
+    }
+
+    & .checkbox__pin {
+      background-color: $color-action;
+      border-radius: 5px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 1;
+      transition: left .25s;
+    }
+
+    & .checkbox__input:not(:checked) + .checkbox__label > .checkbox__type:nth-child(1) {
+      color: $color-white;
+    }
+    & .checkbox__input:not(:checked) + .checkbox__label > .checkbox__pin {
+      left: 0;
+    }
+
+    & .checkbox__input:checked + .checkbox__label > .checkbox__type:nth-child(2) {
+      color: $color-white;
+    }
+    & .checkbox__input:checked + .checkbox__label > .checkbox__pin {
+      left: 50%;
+    }
+  }
+}
